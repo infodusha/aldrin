@@ -1,0 +1,52 @@
+{
+  "name": "aldrin",
+  "version": "0.0.1",
+  "description": "Single Page Applications running on the server side.",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prepare": "cd ../../ && husky install packages/aldrin/.husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infodusha/aldrin.git"
+  },
+  "exports": {
+    ".": "./build/index.js",
+    "./jsx-runtime": "./build/jsx-runtime.js"
+  },
+  "typesVersions": {
+    "*": {
+      "jsx-runtime": [
+        "build/jsx-runtime.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "build/",
+    "package.json",
+    "LICENSE"
+  ],
+  "author": "infodusha",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/infodusha/aldrin/issues"
+  },
+  "homepage": "https://github.com/infodusha/aldrin#readme",
+  "devDependencies": {
+    "@types/node": "^16.11.62",
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.0.1",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1",
+    "typescript": "^4.8.4"
+  }
+}

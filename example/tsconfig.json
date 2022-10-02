@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "ts-node/node16/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "rootDir": "src",
+    "allowSyntheticDefaultImports": true,
+    "outDir": "build",
+    "sourceMap": false,
+    "declaration": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "pretty": true,
+    "skipLibCheck": true,
+    "target": "es2020",
+    "newLine": "LF",
+    "lib": ["es2019"],
+    "jsxImportSource": "aldrin",
+    "jsx": "react-jsx",
+    "paths": {
+      "aldrin/jsx-runtime": ["../src/jsx-runtime.ts"],
+      "aldrin/*": ["../src/*"]
+    },
+
+    // Strict Type-Checking Options
+    "strict": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "alwaysStrict": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "../src/*"]
+}
