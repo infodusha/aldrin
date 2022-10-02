@@ -23,10 +23,6 @@
     "lib": ["es2019"],
     "jsxImportSource": "aldrin",
     "jsx": "react-jsx",
-    "paths": {
-      "aldrin/jsx-runtime": ["../src/jsx-runtime.ts"],
-      "aldrin/*": ["../src/*"]
-    },
 
     // Strict Type-Checking Options
     "strict": true,
