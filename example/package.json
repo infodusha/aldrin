@@ -10,7 +10,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "aldrin": "0.0.1"
+    "aldrin": "^0.0.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.20",
