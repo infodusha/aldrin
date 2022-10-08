@@ -2,15 +2,15 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "build": "npm run build -w aldrin",
-    "watch": "npm run watch -w aldrin",
+    "build": "npm run build -w package",
+    "watch": "npm run watch -w package",
     "start:example": "run-s build start:example:run",
     "start:example:run": "npm run start -w example",
     "watch:example": "run-p watch watch:example:run",
     "watch:example:run": "npm run watch -w example"
   },
   "workspaces": [
-    "packages/*",
+    "package",
     "example"
   ],
   "devDependencies": {

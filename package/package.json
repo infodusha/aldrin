@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "prepare": "cd ../../ && husky install packages/aldrin/.husky"
+    "prepare": "cd ../ && husky install package/.husky"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
   },
   "files": [
     "build/",
+    "script.js",
     "package.json",
     "LICENSE"
   ],
