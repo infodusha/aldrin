@@ -12,10 +12,7 @@ jobs:
       - uses: google-github-actions/release-please-action@v3
         id: release
         with:
-          release-type: node
-          bump-minor-pre-major: true
-          bump-patch-for-minor-pre-major: true
-          pull-request-title-pattern: 'chore: release ${version}'
+          command: manifest
       - uses: actions/checkout@v3
         if: ${{ steps.release.outputs.release_created }}
       - uses: actions/setup-node@v3
