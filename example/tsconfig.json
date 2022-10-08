@@ -33,5 +33,5 @@
     "alwaysStrict": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "../src/*"]
+  "exclude": ["node_modules"]
 }

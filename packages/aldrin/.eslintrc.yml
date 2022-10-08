@@ -7,8 +7,9 @@ extends:
   - plugin:@typescript-eslint/recommended
   - prettier
 parserOptions:
+  tsconfigRootDir: ./packages/aldrin
   ecmaVersion: latest
   sourceType: module
-  project: "./tsconfig.json"
+  project: './tsconfig.json'
 rules:
-  "@typescript-eslint/no-namespace": off
+  '@typescript-eslint/no-namespace': off

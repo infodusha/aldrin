@@ -19,12 +19,11 @@
     "skipLibCheck": true,
     "target": "es2020",
     "newLine": "LF",
-    "lib": ["es2019"],
+    "lib": ["dom", "es2019"],
     "jsxImportSource": "aldrin",
     "jsx": "react-jsx",
     "paths": {
-      "aldrin/jsx-runtime": ["./src/jsx-runtime.ts"],
-      "@src/*": ["./src/*"]
+      "aldrin/jsx-runtime": ["./src/jsx-runtime.ts"]
     },
 
     // Strict Type-Checking Options

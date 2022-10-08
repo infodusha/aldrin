@@ -1,8 +1,7 @@
 node_modules/
 
-# Optional npm cache directory
 .npm/
+.eslintcache
 
-# IDE
 .idea/
 .vscode/

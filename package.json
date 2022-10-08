@@ -6,7 +6,7 @@
     "watch": "npm run watch -w aldrin",
     "start:example": "run-s build start:example:run",
     "start:example:run": "npm run start -w example",
-    "watch:example": "run-p build watch:example:run",
+    "watch:example": "run-p watch watch:example:run",
     "watch:example:run": "npm run watch -w example"
   },
   "workspaces": [

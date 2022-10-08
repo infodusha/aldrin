@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
-  "main": "build/index.js",
+  "main": "build/main.js",
   "scripts": {
     "start": "ts-node src/main.ts",
-    "watch": "nodemon src/main.ts -w src/**/*"
+    "watch": "nodemon src/main.ts --watch src/*"
   },
   "license": "Apache-2.0",
   "dependencies": {

@@ -1,0 +1,10 @@
+{
+  "client": {
+    "reload": [],
+    "createElement": ["html", "parentId"]
+  },
+  "server": {
+    "connect": ["uuid"],
+    "onEvent": ["id"]
+  }
+}
