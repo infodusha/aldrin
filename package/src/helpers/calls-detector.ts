@@ -15,7 +15,10 @@ export class CallsDetector {
     this.currentStates.add(state);
     const rContext = renderContext.get();
     state.change.addListener(() => {
-      const metas = this.stateToMeta.get(state)!;
+      const metas = this.stateToMeta.get(state);
+      if (metas == null) {
+        return;
+      }
       metas.forEach(({ id, element }) => {
         const uContext = userContext.get();
         const html = renderContext.run(rContext, () => render(element));
