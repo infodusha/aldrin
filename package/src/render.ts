@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import { renderContext } from './context';
+import { Connection } from './components/connection';
 
 const singleTags = ['meta', 'img', 'br', 'hr', 'input'];
 
@@ -10,33 +11,59 @@ export function render(item: JSX.Element): string {
   if (Array.isArray(item)) {
     return item.map(render).join('');
   }
+  if (typeof item === 'function') {
+    return renderFunction(item as () => JSX.Node);
+  }
   if (typeof item === 'object') {
-    return renderItem(item);
+    // TODO remove fn here
+    return renderTag(item, () => item);
   }
   return item.toString();
 }
 
-export function renderItem({ type, props, children }: JSX.Node): string {
-  const propsString = renderProps(props);
-  const childrenString = renderChildren(children);
-  if (singleTags.includes(type)) {
-    if (childrenString.length > 0) {
-      throw new Error(`Single tag "${type}" cannot have children`);
-    }
-    return `<${type}${propsString}>`;
+function renderFunction(fn: () => JSX.Node): string {
+  const item = fn();
+  if (item !== null && typeof item === 'object') {
+    return renderTag(item, fn);
   }
-  return `<${type}${propsString}>${childrenString}</${type}>`;
+  return render(item);
 }
 
-function renderProps(props?: Record<string, JSX.FunctionMaybe>): string {
-  if (props == null || Object.keys(props).length === 0) {
+export function renderTag({ type, props, children }: JSX.Node, element: () => JSX.Node): string {
+  const id = crypto.randomUUID();
+  bindElementToStates(element, id);
+
+  const propsString = renderProps(id, props);
+  const childrenString = render(children);
+  if (singleTags.includes(type)) {
+    return renderSingleTag(type, propsString, childrenString);
+  }
+  const childrenStringModified = childrenString + injectConnectionIfBody(type);
+  return `<${type} ${propsString}>${childrenStringModified}</${type}>`;
+}
+
+function renderSingleTag(type: string, propsString: string, childrenString: string): string {
+  if (childrenString.length > 0) {
+    throw new Error(`Single tag "${type}" cannot have children`);
+  }
+  return `<${type} ${propsString}>`;
+}
+
+function injectConnectionIfBody(type: string): string {
+  if (type !== 'body') {
     return '';
   }
-  const id = crypto.randomUUID();
-  const rendered = Object.entries(props)
+  const context = renderContext.get();
+  context.hasBody = true;
+  return render(Connection);
+}
+
+function renderProps(id: string, props?: Record<string, JSX.FunctionMaybe>): string {
+  const propsList = { ...props, id };
+
+  return Object.entries(propsList)
     .map(([key, value]) => renderProp(key, value, id))
     .join(' ');
-  return ` id="${id}" ${rendered}`;
 }
 
 function renderProp(key: string, value: JSX.FunctionMaybe, id: string): string {
@@ -44,26 +71,23 @@ function renderProp(key: string, value: JSX.FunctionMaybe, id: string): string {
     return `${key}="${value.toString()}"`;
   }
   if (typeof value === 'function') {
-    if (key.startsWith('on')) {
-      const context = renderContext.get();
-      context.events.set(id + key, value as (...args: unknown[]) => void);
-      return `${key}="onEvent('${key}', this)"`;
-    } else {
-      // TODO watch value
-    }
+    return renderPropFunction(key, value, id);
   }
   throw new Error('Unsupported property value type ' + typeof value);
 }
 
-function renderChildren(children?: JSX.Element): string {
-  if (children === null || children === undefined) {
-    return '';
+function renderPropFunction(key: string, value: JSX.FunctionMaybe, id: string): string {
+  if (key.startsWith('on')) {
+    const context = renderContext.get();
+    context.events.set(id + key, value as (...args: unknown[]) => void);
+    return `${key}="onEvent('${key}', this)"`;
+  } else {
+    throw new Error('Unable to watch property yet');
+    // TODO watch value
   }
-  if (Array.isArray(children)) {
-    return children.map(renderChildren).join('');
-  }
-  if (typeof children === 'object') {
-    return render(children);
-  }
-  return children.toString();
+}
+
+function bindElementToStates(element: () => JSX.Node, id: string): void {
+  const context = renderContext.get();
+  context.callsDetector.bindElementToStates(element, id);
 }

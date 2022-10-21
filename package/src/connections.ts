@@ -2,8 +2,7 @@ import { WebSocket } from 'ws';
 import { IncomingMessage } from 'node:http';
 import { getContexts, storeContexts, unStoreRenderContext } from './store';
 import { UserContext, userContext } from './context';
-import { callMounts, callUnMounts } from './hooks/mount';
-import { Bridge } from './bridge';
+import { Bridge } from './helpers/bridge';
 import cookie from 'cookie';
 
 const connections = new Set<WebSocket>();
@@ -32,7 +31,7 @@ function connect(socket: WebSocket, uuid: string): void {
   const rContext = unStoreRenderContext(uuid);
   storeContexts(socket, rContext, uContext);
   userContext.run(uContext, () => {
-    callMounts(rContext);
+    rContext.mount.mount();
   });
 }
 
@@ -40,7 +39,7 @@ function disconnect(socket: WebSocket): void {
   connections.delete(socket);
   const { rContext, uContext } = getContexts(socket);
   userContext.run(uContext, () => {
-    callUnMounts(rContext);
+    rContext.mount.unMount();
   });
 }
 

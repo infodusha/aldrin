@@ -1,14 +1,18 @@
-import { userContext } from './context';
-import { getContexts } from './store';
+import { userContext } from '../context';
+import { getContexts } from '../store';
 import { WebSocket } from 'ws';
 
 export class Bridge {
   constructor(private readonly socket: WebSocket) {
-    socket.on('message', (data) => this.listener((data as Buffer).toString()));
+    socket.on('message', (data) => this.listen((data as Buffer).toString()));
   }
 
-  createElement(html: string, parentId: string): void {
-    // TODO
+  updateElement(html: string, targetId: string): void {
+    this.send('updateElement', html, targetId);
+  }
+
+  private send(event: string, ...args: unknown[]): void {
+    this.socket.send(JSON.stringify([event, ...args]));
   }
 
   private onEvent(id: string, key: string): void {
@@ -20,7 +24,7 @@ export class Bridge {
     userContext.run(uContext, fn);
   }
 
-  private listener(data: string): void {
+  private listen(data: string): void {
     const [type, ...payload] = JSON.parse(data);
     switch (type) {
       case 'onEvent':

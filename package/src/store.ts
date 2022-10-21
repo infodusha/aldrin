@@ -4,14 +4,18 @@ import { WebSocket } from 'ws';
 const socketToRenderContext = new WeakMap<WebSocket, RenderContext>();
 const socketToUserContext = new WeakMap<WebSocket, UserContext>();
 
-const renderContexts: RenderContext[] = [];
+const renderContexts = new Set<RenderContext>();
 
 export function storeRenderContext(context: RenderContext): void {
-  renderContexts.push(context);
+  renderContexts.add(context);
+}
+
+export function removeRenderContext(context: RenderContext): void {
+  renderContexts.delete(context);
 }
 
 export function unStoreRenderContext(uuid: string): RenderContext {
-  const context = renderContexts.find((c) => c.uuid === uuid);
+  const context = [...renderContexts].find((c) => c.uuid === uuid);
   if (context === undefined) {
     throw new Error('Unable to find context');
   }

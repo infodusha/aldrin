@@ -1,22 +1,34 @@
 type JSXProps = Record<string, JSX.FunctionMaybe> & { children?: JSX.Element };
 
 export function jsx(
-  item: string | ((props: JSXProps) => JSX.Element),
+  item: string | ((props?: JSXProps) => JSX.Element),
   props?: JSXProps
 ): JSX.Element {
   if (typeof item === 'function') {
-    return item(props ?? {});
+    return item(props);
   }
   const { children, ...restProps } = props ?? {};
-  return {
+  return () => ({
     type: item,
     props: Object.keys(restProps).length > 0 ? restProps : undefined,
     children,
-  };
+  });
 }
 
-// For now, we want exact same appearance for static jsx
-export const jsxs = jsx;
+export function jsxs(
+  item: string | ((props?: JSXProps) => JSX.Element),
+  props?: JSXProps
+): JSX.Element {
+  if (typeof item === 'function') {
+    return item(props);
+  }
+  const { children, ...restProps } = props ?? {};
+  return () => ({
+    type: item,
+    props: Object.keys(restProps).length > 0 ? restProps : undefined,
+    children,
+  });
+}
 
 export function Fragment(props: { children: JSX.Element[] }): JSX.Element[] {
   return props.children;
@@ -46,8 +58,8 @@ declare global {
 
     interface Node {
       type: string;
-      props?: Record<string, JSX.FunctionMaybe>;
-      children?: JSX.Element;
+      props?: Record<string, FunctionMaybe>;
+      children?: Element;
     }
 
     interface ArrayElement extends Array<Element> {}

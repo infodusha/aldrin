@@ -1,33 +1,42 @@
-import { RenderContext, renderContext, userContext } from '../context';
+import { renderContext, UserContext, userContext } from '../context';
 
-export type MountFn = (() => void) | (() => () => void);
+type MountFn = (() => void) | (() => () => void);
 
 export function useMount(fn: MountFn): void {
   const context = renderContext.get();
-  context.mounts.add(fn);
+  context.mount.add(fn);
 }
 
-export function callMounts(rContext: RenderContext): void {
-  const uContext = userContext.get();
-  rContext.mounts.forEach((fn) => {
-    const unMount = fn();
-    if (unMount != null) {
-      let unMounts = rContext.unMounts.get(uContext);
-      if (unMounts == null) {
-        unMounts = new Set<() => void>();
-        rContext.unMounts.set(uContext, unMounts);
-      }
-      unMounts.add(unMount);
-    }
-  });
-}
+export class Mount {
+  private readonly mounts = new Set<MountFn>();
+  private readonly unMounts = new WeakMap<UserContext, Set<() => void>>();
 
-export function callUnMounts(rContext: RenderContext): void {
-  const uContext = userContext.get();
-  const unMounts = rContext.unMounts.get(uContext);
-  if (unMounts == null) {
-    return;
+  add(fn: MountFn): void {
+    this.mounts.add(fn);
   }
-  unMounts.forEach((fn) => fn());
-  unMounts.clear();
+
+  mount(): void {
+    const uContext = userContext.get();
+    this.mounts.forEach((fn) => {
+      const unMount = fn();
+      if (unMount != null) {
+        let unMounts = this.unMounts.get(uContext);
+        if (unMounts == null) {
+          unMounts = new Set<() => void>();
+          this.unMounts.set(uContext, unMounts);
+        }
+        unMounts.add(unMount);
+      }
+    });
+  }
+
+  unMount(): void {
+    const uContext = userContext.get();
+    const unMounts = this.unMounts.get(uContext);
+    if (unMounts == null) {
+      return;
+    }
+    unMounts.forEach((fn) => fn());
+    unMounts.clear();
+  }
 }

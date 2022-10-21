@@ -1,18 +1,20 @@
 import crypto from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { MountFn } from './hooks/mount';
+import { Mount } from './hooks/mount';
 import { State } from './hooks/state';
-import { Bridge } from './bridge';
+import { Bridge } from './helpers/bridge';
+import { CallsDetector } from './helpers/calls-detector';
 
 export class RenderContext {
-  uuid = crypto.randomUUID();
-  mounts = new Set<MountFn>();
-  unMounts = new WeakMap<UserContext, Set<() => void>>();
-  events = new Map<string, (...args: unknown[]) => void>();
+  readonly uuid = crypto.randomUUID();
+  readonly mount = new Mount();
+  readonly callsDetector = new CallsDetector();
+  readonly events = new Map<string, (...args: unknown[]) => void>();
+  hasBody = false;
 }
 
 export class UserContext {
-  states = new WeakMap<State<any>, any>();
+  readonly states = new WeakMap<State<any>, any>();
 
   constructor(public readonly bridge: Bridge) {}
 }

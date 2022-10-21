@@ -1,28 +1,27 @@
-import { callMounts, callUnMounts, useMount } from '../hooks/mount';
+import { useMount } from '../hooks/mount';
 import { RenderContext, renderContext } from '../context';
-import { render } from '../render';
 
 interface ShowProps {
-  when: () => boolean;
+  when: boolean;
+  fallback?: JSX.Element;
   children: JSX.Element;
 }
 
+// TODO that is a draft
 export function Show(props: ShowProps): JSX.Element {
   const rContext = new RenderContext();
 
-  const children = renderContext.run(rContext, () => render(props.children));
-
-  const shown = props.when();
+  // const children = renderContext.run(rContext, () => render(() => props.children));
 
   useMount(() => {
     // TODO subscribe on state changes
 
-    if (shown) {
-      callMounts(rContext);
+    if (props.when) {
+      rContext.mount.mount();
     }
 
-    return callUnMounts(rContext);
+    return rContext.mount.unMount();
   });
 
-  return shown ? children : null;
+  return () => (props.when ? renderContext.run(rContext, () => props.children) : null);
 }
