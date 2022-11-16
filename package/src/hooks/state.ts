@@ -1,46 +1,40 @@
 import { renderContext, userContext } from '../context';
-import { SingleEventEmitter } from '../helpers/single-event-emitter';
+import { useRef } from './ref';
+
+const stateGetterSymbol: unique symbol = Symbol('stateGetter');
+
+export interface StateGetter<T> {
+  (): T;
+  [stateGetterSymbol]: true;
+}
 
 export function useState<T>(initialValue: T): [() => T, (value: T) => void] {
-  const state: State<T> = new State<T>(initialValue);
+  const ref = useRef<T>(initialValue, false);
+  const rContext = renderContext.get();
 
   function get(): T {
-    return state.value;
+    return ref.value;
   }
 
+  const stateGetter = get as StateGetter<T>;
+  stateGetter[stateGetterSymbol] = true;
+
   function set(value: T): void {
-    state.value = value;
+    ref.value = value;
+    const renderer = rContext.stateGetterToRenderer.get(stateGetter);
+    if (renderer == null) {
+      throw new Error('Unable to find renderer');
+    }
+
+    const uContext = userContext.get();
+
+    const html = renderContext.run(rContext, () => renderer.render());
+    uContext.bridge.updateElement(html, renderer.id);
   }
 
   return [get, set];
 }
 
-export class State<T> {
-  readonly change = new SingleEventEmitter<T>();
-
-  constructor(private readonly initialValue: T) {}
-
-  get value(): T {
-    if (renderContext.has()) {
-      // We may want to get state outside of render process
-      // So it is safe to ignore
-      const rContext = renderContext.get();
-      rContext.callsDetector.addState(this);
-    }
-
-    if (!userContext.has()) {
-      return this.initialValue;
-    }
-    const uContext = userContext.get();
-    if (!uContext.states.has(this)) {
-      return this.initialValue;
-    }
-    return uContext.states.get(this);
-  }
-
-  set value(value: T) {
-    const uContext = userContext.get();
-    uContext.states.set(this, value);
-    this.change.emit(value);
-  }
+export function isStateGetter<T>(fn: () => T): fn is StateGetter<T> {
+  return stateGetterSymbol in fn;
 }

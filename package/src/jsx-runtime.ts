@@ -1,6 +1,6 @@
 type JSXProps = Record<string, JSX.FunctionMaybe> & { children?: JSX.Element };
 
-export function jsx(
+function transform(
   item: string | ((props?: JSXProps) => JSX.Element),
   props?: JSXProps
 ): JSX.Element {
@@ -8,26 +8,25 @@ export function jsx(
     return item(props);
   }
   const { children, ...restProps } = props ?? {};
-  return () => ({
+  return {
     type: item,
     props: Object.keys(restProps).length > 0 ? restProps : undefined,
     children,
-  });
+  };
+}
+
+export function jsx(
+  item: string | ((props?: JSXProps) => JSX.Element),
+  props?: JSXProps
+): JSX.Element {
+  return transform(item, props);
 }
 
 export function jsxs(
   item: string | ((props?: JSXProps) => JSX.Element),
   props?: JSXProps
 ): JSX.Element {
-  if (typeof item === 'function') {
-    return item(props);
-  }
-  const { children, ...restProps } = props ?? {};
-  return () => ({
-    type: item,
-    props: Object.keys(restProps).length > 0 ? restProps : undefined,
-    children,
-  });
+  return transform(item, props);
 }
 
 export function Fragment(props: { children: JSX.Element[] }): JSX.Element[] {

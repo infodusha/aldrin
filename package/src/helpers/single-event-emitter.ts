@@ -22,4 +22,8 @@ export class SingleEventEmitter<T> {
       listener(value);
     }
   }
+
+  clearListeners(): void {
+    this.listeners.clear();
+  }
 }

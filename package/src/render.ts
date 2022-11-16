@@ -1,35 +1,41 @@
 import crypto from 'node:crypto';
 import { renderContext } from './context';
 import { Connection } from './components/connection';
+import { isStateGetter, StateGetter } from './hooks/state';
 
 const singleTags = ['meta', 'img', 'br', 'hr', 'input'];
 
-export function render(item: JSX.Element, id?: string): string {
+export function render(item: JSX.Element, renderer?: Renderer): string {
   if (item === null || item === undefined) {
     return '';
   }
   if (Array.isArray(item)) {
-    return item.map((c) => render(c)).join('');
+    return item.map((c) => render(c, renderer)).join('');
   }
   if (typeof item === 'function') {
-    const element = item as () => JSX.Node;
-    const id = crypto.randomUUID();
-    bindElementToStates(element, id);
-    return render(element(), id);
+    if (isStateGetter(item)) {
+      bindStateToRenderer(item, renderer);
+    }
+    return render(item(), renderer);
   }
   if (typeof item === 'object') {
-    return new Renderer(item, id ?? crypto.randomUUID()).render();
+    return new Renderer(item).render();
   }
   return item.toString();
 }
 
-function bindElementToStates(element: () => JSX.Node, id: string): void {
+function bindStateToRenderer(stateGetter: StateGetter<unknown>, renderer?: Renderer): void {
+  if (renderer == null) {
+    throw new Error('Unable to bind state to renderer (No renderer found?)');
+  }
   const context = renderContext.get();
-  context.callsDetector.bindElementToStates(element, id);
+  context.stateGetterToRenderer.set(stateGetter, renderer);
 }
 
-class Renderer {
-  constructor(private readonly item: JSX.Node, private readonly id: string) {}
+export class Renderer {
+  readonly id = crypto.randomUUID();
+
+  constructor(public readonly item: JSX.Node) {}
 
   private get tag(): string {
     return this.item.type;
@@ -44,13 +50,20 @@ class Renderer {
   }
 
   private get children(): string {
-    const children = render(this.item.children);
+    const children = render(this.item.children, this);
     if (this.tag === 'body') {
-      const context = renderContext.get();
-      context.hasBody = true;
+      this.markHasBody();
       return children + render(Connection);
     }
     return children;
+  }
+
+  private markHasBody(): void {
+    const context = renderContext.get();
+    if (context.hasBody) {
+      throw new Error('Body tag already exists');
+    }
+    context.hasBody = true;
   }
 
   private renderSingleTag(): string {

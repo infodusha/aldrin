@@ -29,14 +29,14 @@ function Test({ prop, children }: TestProps): JSX.Element {
   const [clicks, setClicks] = useState(0);
 
   function handleClick() {
-    console.log("click " + clicks());
+    // console.log("click " + clicks());
     setClicks(clicks() + 1);
   }
 
   return (
     <footer class="test">
       <button onclick={handleClick}>test child 1</button>
-      <div>Clicks: {clicks()}</div>
+      <div>Clicks: {clicks}</div>
       <div>
         test child {prop} {children}
       </div>
