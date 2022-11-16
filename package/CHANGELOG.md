@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.3](https://github.com/infodusha/aldrin/compare/aldrin-v0.0.2...aldrin-v0.0.3) (2022-11-16)
+
+
+### Features
+
+* create readme symlink ([3cdc426](https://github.com/infodusha/aldrin/commit/3cdc426e5d224d3eb487197d8f29a9438e2097df))
+
 ## [0.0.2](https://github.com/infodusha/aldrin/compare/aldrin-v0.0.1...aldrin-v0.0.2) (2022-11-16)
 
 
