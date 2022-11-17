@@ -13,9 +13,8 @@ jobs:
         id: release
         with:
           command: manifest
-      - run: echo ${{ steps.release.outputs }}
-      - run: echo "yes"
-        if: ${{ steps.release.outputs['package--release_created'] }}
+      - run: echo ${{ steps.release.outputs.release_created }}
+      - run: echo ${{ steps.release.outputs['package--release_created'] }}
       - uses: actions/checkout@v3
         if: ${{ steps.release.outputs.release_created }}
       - uses: actions/setup-node@v3

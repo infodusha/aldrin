@@ -1,3 +1,5 @@
+// Not used
+
 export class SingleEventEmitter<T> {
   protected readonly listeners = new Set<(value: T) => void>();
 
