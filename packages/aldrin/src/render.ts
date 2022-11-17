@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import { renderContext } from './context';
 import { Connection } from './components/connection';
-import { isStateGetter, StateGetter } from './hooks/state';
+import { bindReactiveToRenderer, makeReactive } from './helpers/reactive';
 
 const singleTags = ['meta', 'img', 'br', 'hr', 'input'];
 
@@ -13,23 +13,13 @@ export function render(item: JSX.Element, renderer?: Renderer): string {
     return item.map((c) => render(c, renderer)).join('');
   }
   if (typeof item === 'function') {
-    if (isStateGetter(item)) {
-      bindStateToRenderer(item, renderer);
-    }
-    return render(item(), renderer);
+    const fn = bindReactiveToRenderer(item, renderer);
+    return render(fn(), renderer);
   }
   if (typeof item === 'object') {
     return new Renderer(item).render();
   }
   return item.toString();
-}
-
-function bindStateToRenderer(stateGetter: StateGetter<unknown>, renderer?: Renderer): void {
-  if (renderer == null) {
-    throw new Error('Unable to bind state to renderer (No renderer found?)');
-  }
-  const context = renderContext.get();
-  context.stateGetterToRenderer.set(stateGetter, renderer);
 }
 
 export class Renderer {
@@ -53,7 +43,8 @@ export class Renderer {
     const children = render(this.item.children, this);
     if (this.tag === 'body') {
       this.markHasBody();
-      return children + render(Connection);
+      // Make reactive as we pass component function
+      return children + render(makeReactive(Connection), this);
     }
     return children;
   }

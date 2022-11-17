@@ -1,5 +1,8 @@
 import { userContext } from '../context';
 
+/*
+  Creates object with `value` property, bound to user
+*/
 export function useRef<T>(initialValue: T, strict = true): Ref<T> {
   return new Ref(initialValue, strict);
 }
