@@ -6,7 +6,7 @@ import {
 } from './reactive';
 import { AnyFunction } from '../types';
 
-const readStates: Set<AnyFunction> = new Set();
+const readStates = new Set<AnyFunction>();
 
 export function makeComputed<T>(fn: () => T): () => T {
   if (isReactive(fn)) {
