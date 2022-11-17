@@ -36,6 +36,12 @@
     "url": "https://github.com/infodusha/aldrin/issues"
   },
   "homepage": "https://github.com/infodusha/aldrin#readme",
+  "keywords": [
+    "aldrin",
+    "ui",
+    "reactive",
+    "components"
+  ],
   "devDependencies": {
     "@types/cookie": "^0.5.1",
     "@types/node": "^16.11.62",
