@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.9](https://github.com/infodusha/aldrin/compare/aldrin-v0.0.8...aldrin-v0.0.9) (2022-11-17)
+
+
+### Bug Fixes
+
+* **ci:** move folders back ([01dc4b9](https://github.com/infodusha/aldrin/commit/01dc4b9701d8deb99511660eb0d637164c795ba5))
+
 ## [0.0.8](https://github.com/infodusha/aldrin/compare/aldrin-v0.0.7...aldrin-v0.0.8) (2022-11-17)
 
 
