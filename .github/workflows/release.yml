@@ -20,13 +20,11 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
         if: ${{ steps.release.outputs['package--release_created'] }}
-      - run: cd ./package
-        if: ${{ steps.release.outputs['package--release_created'] }}
       - run: npm ci
         if: ${{ steps.release.outputs['package--release_created'] }}
       - run: npm run build
         if: ${{ steps.release.outputs['package--release_created'] }}
-      - run: npm publish
+      - run: cd ./package && npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         if: ${{ steps.release.outputs['package--release_created'] }}
