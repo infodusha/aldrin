@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/infodusha/aldrin/compare/aldrin-v0.0.3...aldrin-v0.0.4) (2022-11-17)
+
+
+### Features
+
+* test ci 3 ([d796c29](https://github.com/infodusha/aldrin/commit/d796c299179c66a81c1450f39452a0edbb13cd08))
+
 ## [0.0.3](https://github.com/infodusha/aldrin/compare/aldrin-v0.0.2...aldrin-v0.0.3) (2022-11-16)
 
 
