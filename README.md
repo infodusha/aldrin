@@ -1,1 +1,11 @@
-packages/aldrin/README.md
+# Aldrin
+Single Page Applications running on the server side.
+
+## Installation
+```bash
+npm install aldrin
+```
+
+## Usage
+
+For now, usage can be found in the example directory.

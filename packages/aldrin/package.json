@@ -28,6 +28,7 @@
     "build/",
     "script.js",
     "package.json",
+    "README.md",
     "LICENSE"
   ],
   "author": "infodusha",
