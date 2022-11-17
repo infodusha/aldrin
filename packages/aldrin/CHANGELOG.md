@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.0](https://github.com/infodusha/aldrin/compare/aldrin-v0.0.10...aldrin-v0.1.0) (2022-11-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **app:** release
+
+### Bug Fixes
+
+* **app:** release ([f710202](https://github.com/infodusha/aldrin/commit/f710202c9b420346aefeb6cbdda9bd9324f36f62))
+
 ## [0.0.10](https://github.com/infodusha/aldrin/compare/aldrin-v0.0.9...aldrin-v0.0.10) (2022-11-17)
 
 
