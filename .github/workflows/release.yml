@@ -13,7 +13,7 @@ jobs:
         id: release
         with:
           command: manifest
-      - run: echo {{ steps.release.outputs }}
+      - run: echo ${{ steps.release.outputs }}
       - run: echo "yes"
         if: ${{ steps.release.outputs['package--release_created'] }}
       - uses: actions/checkout@v3
