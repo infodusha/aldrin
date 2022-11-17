@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6](https://github.com/infodusha/aldrin/compare/aldrin-v0.0.5...aldrin-v0.0.6) (2022-11-17)
+
+
+### Bug Fixes
+
+* **ci:** releases ([a579502](https://github.com/infodusha/aldrin/commit/a57950206b091bda761f35322a625d65f89ea98e))
+
 ## [0.0.5](https://github.com/infodusha/aldrin/compare/aldrin-v0.0.4...aldrin-v0.0.5) (2022-11-17)
 
 
