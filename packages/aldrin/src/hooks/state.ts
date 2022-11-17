@@ -1,7 +1,9 @@
 import { renderContext, userContext } from '../context';
 import { useRef } from './ref';
 import { makeReactive, processReactiveRenderers } from '../helpers/reactive';
-import { readState } from '../helpers/computed';
+import { AnyFunction } from '../types';
+
+export const stateReads = new Set<AnyFunction>();
 
 /*
   Creates a tuple `[get, set]`, bound to user
@@ -13,7 +15,7 @@ export function useState<T>(initialValue: T): [() => T, (value: T) => void] {
   const rContext = renderContext.get();
 
   const get: () => T = makeReactive(() => {
-    readState(get);
+    stateReads.add(get);
     return ref.value;
   });
 

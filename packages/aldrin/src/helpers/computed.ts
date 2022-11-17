@@ -4,9 +4,7 @@ import {
   makeReactive,
   processReactiveRenderers,
 } from './reactive';
-import { AnyFunction } from '../types';
-
-const readStates = new Set<AnyFunction>();
+import { stateReads } from '../hooks/state';
 
 export function makeComputed<T>(fn: () => T): () => T {
   if (isReactive(fn)) {
@@ -14,23 +12,19 @@ export function makeComputed<T>(fn: () => T): () => T {
   }
 
   const reactiveFn = makeReactive<T>(() => {
-    readStates.clear();
+    stateReads.clear();
     const result = fn();
-    if (readStates.size === 0) {
+    if (stateReads.size === 0) {
       console.warn('No states for computed');
     }
-    readStates.forEach((state) => {
+    stateReads.forEach((state) => {
       processReactiveRenderers(reactiveFn, (renderer) => {
         bindReactiveToRenderer(state as JSX.FunctionElement, renderer);
       });
     });
-    readStates.clear();
+    stateReads.clear();
     return result;
   });
 
   return reactiveFn;
-}
-
-export function readState(fn: AnyFunction): void {
-  readStates.add(fn);
 }

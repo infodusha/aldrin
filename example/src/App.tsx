@@ -32,11 +32,15 @@ function Test({ prop, children }: TestProps): JSX.Element {
     setClicks(clicks() + 1);
   }
 
+  function nextClick(): number {
+    return clicks() + 1;
+  }
+
   return (
     <footer class="test">
       <button onclick={handleClick}>test child {clicks}</button>
       <div>Clicks: {clicks}</div>
-      <div>Next click: {() => clicks() + 1}</div>
+      <div>Next click: {nextClick}</div>
       <div>
         test child {prop} {children}
       </div>
