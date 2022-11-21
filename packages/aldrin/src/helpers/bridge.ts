@@ -11,6 +11,14 @@ export class Bridge {
     this.send('updateElement', html, targetId);
   }
 
+  createElement(html: string, parentId: string, nodeIndex: number): void {
+    this.send('createElement', html, parentId, nodeIndex);
+  }
+
+  removeElement(parentId: string, nodeIndex: number, nodeCount: number): void {
+    this.send('removeElement', parentId, nodeIndex, nodeCount);
+  }
+
   private send(event: string, ...args: unknown[]): void {
     this.socket.send(JSON.stringify([event, ...args]));
   }

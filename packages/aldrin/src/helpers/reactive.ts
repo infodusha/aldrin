@@ -1,30 +1,29 @@
-import {
-  bindFunctionMetadata,
-  hasFunctionMetadata,
-  getFunctionMetadata,
-} from './function-metadata';
 import { AnyFunction } from '../types';
-import { renderContext } from '../context';
+import { renderContext, userContext } from '../context';
 import { Renderer } from '../render';
 import { makeComputed } from './computed';
+import { SingleEventEmitter } from './single-event-emitter';
+import { definedOrThrow } from './defined-or-throw';
 
-const reactiveSymbol: unique symbol = Symbol('reactive');
+const reactiveMetadataMap = new WeakMap<() => unknown, SingleEventEmitter<any>>();
 
-export function makeReactive<T>(fn: () => T): () => T {
-  return bindFunctionMetadata(fn, reactiveSymbol);
+export function makeReactive<T>(fn: () => T): SingleEventEmitter<T> {
+  const change = new SingleEventEmitter<T>();
+  reactiveMetadataMap.set(fn, change);
+  return change;
 }
 
 export function isReactive(fn: AnyFunction): boolean {
-  return hasFunctionMetadata(fn) && getFunctionMetadata(fn) === reactiveSymbol;
+  return reactiveMetadataMap.has(fn);
 }
 
-function getReactiveRenderers<T>(fn: () => T, warnIfEmpty = true): Set<Renderer> {
-  const rContext = renderContext.get();
-  const renderers = rContext.reactiveToRenderers.get(fn) ?? new Set<Renderer>();
-  if (warnIfEmpty && renderers.size === 0) {
-    console.warn('Reactive is not rendered');
+export function getReactiveChange<T>(fn: () => T): SingleEventEmitter<T> {
+  if (!isReactive(fn)) {
+    throw new Error('Not reactive');
   }
-  return renderers;
+  const change = reactiveMetadataMap.get(fn);
+  definedOrThrow(change);
+  return change;
 }
 
 export function bindReactiveToRenderer(
@@ -36,20 +35,15 @@ export function bindReactiveToRenderer(
     throw new Error('Unable to bind computed to renderer (No renderer found?)');
   }
   const rContext = renderContext.get();
-  const renderers = getReactiveRenderers(fn, false);
-  renderers.add(renderer);
-  rContext.reactiveToRenderers.set(fn, renderers);
-  return fn;
-}
+  const change = getReactiveChange(fn);
 
-export function processReactiveRenderers(
-  fn: AnyFunction,
-  callback: (renderer: Renderer) => void
-): void {
-  const renderers = getReactiveRenderers(fn, true);
-  const renderersArray = Array.from(renderers);
-  renderers.clear();
-  renderersArray.forEach((renderer) => {
-    callback(renderer);
+  queueMicrotask(() => {
+    change.once(() => {
+      const uContext = userContext.get();
+      const html = renderContext.run(rContext, () => renderer.render());
+      uContext.bridge.updateElement(html, renderer.id);
+    });
   });
+
+  return fn;
 }

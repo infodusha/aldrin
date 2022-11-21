@@ -1,30 +1,46 @@
-import {
-  bindReactiveToRenderer,
-  isReactive,
-  makeReactive,
-  processReactiveRenderers,
-} from './reactive';
-import { stateReads } from '../hooks/state';
+import { getReactiveChange, isReactive, makeReactive } from './reactive';
+import { stateCallsDetector } from '../hooks/state';
 
 export function makeComputed<T>(fn: () => T): () => T {
   if (isReactive(fn)) {
     return fn;
   }
 
-  const reactiveFn = makeReactive<T>(() => {
-    stateReads.clear();
-    const result = fn();
-    if (stateReads.size === 0) {
-      console.warn('No states for computed');
-    }
-    stateReads.forEach((state) => {
-      processReactiveRenderers(reactiveFn, (renderer) => {
-        bindReactiveToRenderer(state as JSX.FunctionElement, renderer);
-      });
-    });
-    stateReads.clear();
-    return result;
-  });
+  let lastCalls: Set<() => T>;
 
-  return reactiveFn;
+  function clear(): void {
+    lastCalls.forEach((reactive) => {
+      const change = getReactiveChange(reactive);
+      change.removeListener(handleChange);
+    });
+    lastCalls.clear();
+  }
+
+  function getValue(): T {
+    const { result, calls } = stateCallsDetector.detect(fn);
+    if (calls.size === 0) {
+      console.warn(`No states for computed ${fn.toString()}`);
+    }
+
+    lastCalls = new Set(calls);
+
+    calls.forEach((reactive) => {
+      const change = getReactiveChange(reactive);
+      change.once(handleChange);
+    });
+
+    return result;
+  }
+
+  const change = makeReactive(getValue);
+
+  function handleChange(): void {
+    clear();
+    queueMicrotask(() => {
+      const value = getValue();
+      change.emit(value);
+    });
+  }
+
+  return getValue;
 }

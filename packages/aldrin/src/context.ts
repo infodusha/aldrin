@@ -3,13 +3,11 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 import { Mount } from './hooks/mount';
 import { Bridge } from './helpers/bridge';
 import { Ref } from './hooks/ref';
-import { Renderer } from './render';
 
 export class RenderContext {
   readonly uuid = crypto.randomUUID();
   readonly mount = new Mount();
   readonly events = new Map<string, (...args: unknown[]) => void>();
-  readonly reactiveToRenderers = new WeakMap<() => unknown, Set<Renderer>>();
   hasBody = false;
 }
 

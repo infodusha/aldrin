@@ -1,4 +1,4 @@
-import { useMount, useState } from "aldrin";
+import { Show, useMount, useState } from "aldrin";
 
 export function App(): JSX.Element {
   useMount(() => {
@@ -14,7 +14,6 @@ export function App(): JSX.Element {
         <input />
         <br />
         <Test prop={2}>children</Test>
-        {/*<Show when={() => clicks() > 5}>More than 5 clicks</Show>*/}
       </body>
     </html>
   );
@@ -36,11 +35,16 @@ function Test({ prop, children }: TestProps): JSX.Element {
     return clicks() + 1;
   }
 
+  const fallback = <span>Less then 5</span>;
+
   return (
     <footer class="test">
       <button onclick={handleClick}>test child {clicks}</button>
       <div>Clicks: {clicks}</div>
       <div>Next click: {nextClick}</div>
+      <Show when={() => clicks() > 5} fallback={fallback}>
+        More than 5 clicks
+      </Show>
       <div>
         test child {prop} {children}
       </div>

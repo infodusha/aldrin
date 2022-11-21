@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import { renderContext } from './context';
 import { Connection } from './components/connection';
-import { bindReactiveToRenderer, makeReactive } from './helpers/reactive';
+import { bindReactiveToRenderer } from './helpers/reactive';
 
 const singleTags = ['meta', 'img', 'br', 'hr', 'input'];
 
@@ -43,8 +43,7 @@ export class Renderer {
     const children = render(this.item.children, this);
     if (this.tag === 'body') {
       this.markHasBody();
-      // Make reactive as we pass component function
-      return children + render(makeReactive(Connection), this);
+      return children + render(Connection());
     }
     return children;
   }
