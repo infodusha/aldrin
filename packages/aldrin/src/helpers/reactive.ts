@@ -25,11 +25,8 @@ export function getReactiveChange<T>(fn: () => T): SingleEventEmitter<T> {
   return change;
 }
 
-export function bindReactiveToRenderer(
-  item: JSX.FunctionElement,
-  renderer?: Renderer
-): () => JSX.Element {
-  const fn = makeComputed(item);
+export function bindReactiveToRenderer<T>(reactive: () => T, renderer?: Renderer): () => T {
+  const fn = makeComputed<T>(reactive);
   if (renderer == null) {
     throw new Error('Unable to bind computed to renderer (No renderer found?)');
   }
@@ -38,8 +35,12 @@ export function bindReactiveToRenderer(
 
   change.once(() => {
     const uContext = userContext.get();
-    const html = renderContext.run(rContext, () => renderer.render());
-    uContext.bridge.updateElement(html, renderer.id);
+    renderContext
+      .run(rContext, () => renderer.render())
+      .then((html) => {
+        uContext.bridge.updateElement(html, renderer.id);
+      })
+      .catch(console.error);
   });
 
   return fn;

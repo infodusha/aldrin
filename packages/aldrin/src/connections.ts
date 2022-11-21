@@ -14,7 +14,7 @@ export async function broadcast(data: string): Promise<void> {
 }
 
 export async function write(socket: WebSocket, data: string): Promise<void> {
-  return await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     socket.send(data, (err) => {
       if (err != null) {
         reject(err);

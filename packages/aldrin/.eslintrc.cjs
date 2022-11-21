@@ -17,7 +17,9 @@ module.exports = {
     project: ['./tsconfig.json']
   },
   rules: {
-    '@typescript-eslint/no-namespace': 'off'
+    '@typescript-eslint/no-namespace': 'off',
+    '@typescript-eslint/return-await': 'off',
+    '@typescript-eslint/promise-function-async': 'off',
   }
 }
 

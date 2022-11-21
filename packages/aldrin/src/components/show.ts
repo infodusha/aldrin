@@ -10,7 +10,7 @@ interface ShowProps {
   children: JSX.Element;
 }
 
-export function Show(props: ShowProps): JSX.Element {
+export async function Show(props: ShowProps): JSX.AsyncElement {
   const when = makeComputed(props.when);
   const initial = when();
   const change = getReactiveChange(when);
@@ -18,10 +18,10 @@ export function Show(props: ShowProps): JSX.Element {
   const rContextChildren = new RenderContext();
   const rContextFallback = new RenderContext();
 
-  const children = renderContext.run(rContextChildren, () => render(props.children));
+  const children = await renderContext.run(rContextChildren, () => render(props.children));
   const fallback =
     props.fallback !== undefined
-      ? renderContext.run(rContextFallback, () => render(props.fallback))
+      ? await renderContext.run(rContextFallback, () => render(props.fallback))
       : null;
 
   useMount(() => {
@@ -35,6 +35,7 @@ export function Show(props: ShowProps): JSX.Element {
       if (newValue) {
         rContextFallback.mount.unMount();
 
+        // TODO - create elements
         // const uContext = userContext.get();
         // uContext.bridge.createElement(children, parentId, nodeIndex);
 
@@ -43,8 +44,6 @@ export function Show(props: ShowProps): JSX.Element {
         rContextChildren.mount.unMount();
         rContextFallback.mount.mount();
       }
-
-      // TODO - update elements
     }
 
     if (value) {

@@ -12,9 +12,9 @@ export interface PreRender {
   context: RenderContext;
 }
 
-export function preRender(component: () => JSX.Element): PreRender {
+export async function preRender(component: () => JSX.Element): Promise<PreRender> {
   const context = new RenderContext();
-  const html = renderContext.run(context, () => {
+  const html = await renderContext.run(context, () => {
     return render(component());
   });
   throwIfNoBody(context);
@@ -32,12 +32,12 @@ export function serve(preRender: PreRender, res: http.ServerResponse<http.Incomi
   res.end(preRender.html);
 }
 
-export function renderAndServe(
+export async function renderAndServe(
   component: () => JSX.Element,
   res: http.ServerResponse<http.IncomingMessage>
-): void {
+): Promise<void> {
   const context = new RenderContext();
-  const html = renderContext.run(context, () => {
+  const html = await renderContext.run(context, () => {
     return render(component());
   });
   throwIfNoBody(context);

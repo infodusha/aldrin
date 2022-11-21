@@ -45,9 +45,11 @@ type DOMElement = Element;
 declare global {
   namespace JSX {
     type FunctionMaybe<T = unknown> = (() => T) | T;
+    type AsyncElement = Promise<Exclude<Element, Promise<Element>>>;
     type Element =
       | Node
       | ArrayElement
+      | Promise<Element>
       | FunctionElement
       | (string & {})
       | number

@@ -7,7 +7,7 @@
     "start:example": "run-s build start:example:run",
     "start:example:run": "npm run start -w example",
     "watch:example": "run-p watch watch:example:run",
-    "watch:example:run": "cd example && nodemon src/main.ts --watch src/* --watch ../packages/aldrin/build --delay 1"
+    "watch:example:run": "cd example && nodemon --watch src/* --watch ../packages/aldrin/build --delay 1 src/main.ts"
   },
   "workspaces": [
     "packages/*",
