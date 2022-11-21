@@ -36,10 +36,8 @@ export function makeComputed<T>(fn: () => T): () => T {
 
   function handleChange(): void {
     clear();
-    queueMicrotask(() => {
-      const value = getValue();
-      change.emit(value);
-    });
+    const value = getValue();
+    change.emit(value);
   }
 
   return getValue;

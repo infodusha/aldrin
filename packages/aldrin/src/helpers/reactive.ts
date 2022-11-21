@@ -37,12 +37,10 @@ export function bindReactiveToRenderer(
   const rContext = renderContext.get();
   const change = getReactiveChange(fn);
 
-  queueMicrotask(() => {
-    change.once(() => {
-      const uContext = userContext.get();
-      const html = renderContext.run(rContext, () => renderer.render());
-      uContext.bridge.updateElement(html, renderer.id);
-    });
+  change.once(() => {
+    const uContext = userContext.get();
+    const html = renderContext.run(rContext, () => renderer.render());
+    uContext.bridge.updateElement(html, renderer.id);
   });
 
   return fn;

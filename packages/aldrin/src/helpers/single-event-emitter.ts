@@ -27,7 +27,9 @@ export class SingleEventEmitter<T> {
   }
 
   emit(value: T): void {
-    for (const listener of this.listeners) {
+    // Copy to prevent infinite loop
+    const listeners = [...this.listeners];
+    for (const listener of listeners) {
       listener(value);
     }
   }
