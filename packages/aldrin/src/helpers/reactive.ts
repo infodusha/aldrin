@@ -1,4 +1,3 @@
-import { AnyFunction } from '../types';
 import { renderContext, userContext } from '../context';
 import { Renderer } from '../render';
 import { makeComputed } from './computed';
@@ -13,7 +12,7 @@ export function makeReactive<T>(fn: () => T): SingleEventEmitter<T> {
   return change;
 }
 
-export function isReactive(fn: AnyFunction): boolean {
+export function isReactive(fn: () => unknown): boolean {
   return reactiveMetadataMap.has(fn);
 }
 
