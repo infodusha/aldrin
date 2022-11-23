@@ -5,13 +5,13 @@
     "build": "npm run build -w aldrin",
     "watch": "npm run watch -w aldrin",
     "start:example": "run-s build start:example:run",
-    "start:example:run": "npm run start -w example",
+    "start:example:run": "npm run start -w examples/counter",
     "watch:example": "run-p watch watch:example:run",
-    "watch:example:run": "cd example && nodemon --watch src/* --watch ../packages/aldrin/build --delay 1 src/main.ts"
+    "watch:example:run": "cd examples/counter && nodemon src/main.ts --watch src/* --watch ../../packages/aldrin/build --delay 1"
   },
   "workspaces": [
     "packages/*",
-    "example"
+    "examples/*"
   ],
   "devDependencies": {
     "nodemon": "^2.0.20",

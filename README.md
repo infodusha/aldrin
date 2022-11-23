@@ -8,12 +8,12 @@ npm install aldrin
 
 ## Usage
 
-For now, usage can be found in the example directory.
+For now, usage can be found in the 'examples' directory.
 
 ## Roadmap
 
 - Show component
-- Async components
+- Unit tests
 - Context provider
 - For component
 - Watch hook
