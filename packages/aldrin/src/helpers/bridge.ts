@@ -7,8 +7,8 @@ export class Bridge {
     socket.on('message', (data) => this.listen((data as Buffer).toString()));
   }
 
-  updateElement(html: string, targetId: string): void {
-    this.send('updateElement', html, targetId);
+  updateElement(html: string, parentId: string, nodeIndex: number, nodeCount: number): void {
+    this.send('updateElement', html, parentId, nodeIndex, nodeCount);
   }
 
   createElement(html: string, parentId: string, nodeIndex: number): void {

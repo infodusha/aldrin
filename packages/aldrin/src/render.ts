@@ -6,21 +6,21 @@ import { bindReactiveToRenderer } from './helpers/reactive';
 const singleTags = ['meta', 'img', 'br', 'hr', 'input'];
 
 export async function render(item: JSX.Element, renderer?: Renderer): Promise<string> {
+  if (item === null || item === undefined) {
+    return '';
+  }
   if (item instanceof Promise) {
     const data = await (item as JSX.AsyncElement);
     return render(data, renderer);
   }
-  if (item === null || item === undefined) {
-    return '';
-  }
   if (Array.isArray(item)) {
-    const promises = item.map((c) => render(c, renderer));
-    const results = await Promise.all(promises);
+    const results = await Promise.all(item.map((c) => render(c, renderer)));
     return results.join('');
   }
   if (typeof item === 'function') {
     const fn = bindReactiveToRenderer(item, renderer);
-    return await render(fn(), renderer);
+    const result = await render(fn(), renderer);
+    return `<!-- -->${result}<!-- -->`; // Make sure that will be a different node
   }
   if (typeof item === 'object') {
     return new Renderer(item).render();
@@ -89,6 +89,16 @@ export class Renderer {
       const fn = bindReactiveToRenderer(value, this);
       return fn();
     }
+  }
+
+  findChildIndex(item: JSX.Element): number {
+    if (this.item.children === item) {
+      return 0;
+    }
+    if (Array.isArray(this.item.children)) {
+      return this.item.children.indexOf(item);
+    }
+    return -1;
   }
 
   async render(): Promise<string> {

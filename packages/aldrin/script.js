@@ -15,28 +15,35 @@ socket.addEventListener('message', ({ data }) => {
   }
 });
 
-function updateElement(html, targetId) {
+function createElements(html) {
   const div = document.createElement('div');
   div.innerHTML = html;
-  const target = document.getElementById(targetId);
-  target.replaceWith(...div.children);
+  return div.childNodes;
+}
+
+function updateElement(html, parentId, nodeIndex, nodeCount) {
+  removeElement(parentId, nodeIndex, nodeCount);
+  createElement(html, parentId, nodeIndex);
+}
+
+function getChildren(parentId) {
+  const parent = document.getElementById(parentId);
+  return Array.from(parent.childNodes).filter((c) => c.nodeType !== 8); // Filter out comments
 }
 
 function createElement(html, parentId, nodeIndex) {
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  const parent = document.getElementById(parentId);
-  const children = parent.children;
+  const elements = createElements(html);
+  const children = getChildren(parentId);
   if (nodeIndex === children.length) {
-    parent.append(...div.children);
+    const parent = document.getElementById(parentId);
+    parent.append(...elements);
   } else {
-    children[nodeIndex].before(...div.children);
+    children[nodeIndex].before(...elements);
   }
 }
 
 function removeElement(parentId, nodeIndex, nodeCount) {
-  const parent = document.getElementById(parentId);
-  Array.from(parent.children)
+  getChildren(parentId)
     .slice(nodeIndex, nodeIndex + nodeCount)
     .forEach((child) => child.remove());
 }
@@ -44,3 +51,5 @@ function removeElement(parentId, nodeIndex, nodeCount) {
 function onEvent(key, item) {
   socket.send(JSON.stringify(['onEvent', item.id, key]));
 }
+
+window.onEvent = onEvent;
