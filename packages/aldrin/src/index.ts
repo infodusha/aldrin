@@ -7,32 +7,21 @@ import cookie from 'cookie';
 import { removeRenderContext, storeRenderContext } from './store';
 import { config } from './config';
 
-export interface PreRender {
-  html: string;
-  context: RenderContext;
-}
-
-export async function preRender(component: () => JSX.Element): Promise<PreRender> {
-  const context = new RenderContext();
-  const html = await renderContext.run(context, () => {
-    return render(component());
-  });
-  throwIfNoBody(context);
-  storeRenderContext(context);
-  return { html, context };
-}
-
-export function serve(preRender: PreRender, res: http.ServerResponse<http.IncomingMessage>): void {
-  const uuid = preRender.context.uuid;
+function serve(
+  html: string,
+  context: RenderContext,
+  res: http.ServerResponse<http.IncomingMessage>
+): void {
+  const uuid = context.uuid;
   const cookies = cookie.serialize('uuid', uuid, { httpOnly: true });
   res.writeHead(200, {
     'Content-Type': 'text/html',
     'Set-Cookie': cookies,
   });
-  res.end(preRender.html);
+  res.end(html);
 }
 
-export async function renderAndServe(
+export async function renderPage(
   component: () => JSX.Element,
   res: http.ServerResponse<http.IncomingMessage>
 ): Promise<void> {
@@ -42,8 +31,10 @@ export async function renderAndServe(
   });
   throwIfNoBody(context);
   storeRenderContext(context);
-  serve({ html, context }, res);
-  removeRenderContext(context);
+  serve(html, context, res);
+  setTimeout(() => {
+    removeRenderContext(context);
+  }, config.connectionTimeoutMs);
 }
 
 export function serveWebSocket(): void {

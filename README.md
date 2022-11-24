@@ -18,3 +18,4 @@ For now, usage can be found in the 'examples' directory.
 - For component
 - Watch hook
 - CSS imports
+- UUID security

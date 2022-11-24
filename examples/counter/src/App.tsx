@@ -4,7 +4,7 @@ import { Layout } from "./Layout";
 let counter = 0;
 
 export function App(): JSX.Element {
-  const [clicks, setClicks] = useState(0);
+  const [clicks, setClicks] = useState(() => counter);
 
   function handleClick() {
     counter++;

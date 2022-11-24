@@ -9,7 +9,7 @@ export const stateCallsDetector = new CallsDetector<() => any>();
 
   Changes will trigger rerender
 */
-export function useState<T>(initialValue: T): [() => T, (value: T) => void] {
+export function useState<T>(initialValue: T | (() => T)): [() => T, (value: T) => void] {
   const ref = useRef<T>(initialValue, false);
 
   function get(): T {
