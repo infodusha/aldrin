@@ -1,4 +1,3 @@
-import { useRef } from './ref';
 import { makeReactive } from '../helpers/reactive';
 import { CallsDetector } from '../helpers/calls-detector';
 
@@ -9,19 +8,19 @@ export const stateCallsDetector = new CallsDetector<() => any>();
 
   Changes will trigger rerender
 */
-export function useState<T>(initialValue: T | (() => T)): [() => T, (value: T) => void] {
-  const ref = useRef<T>(initialValue, false);
+export function useState<T>(initialValue: T): [() => T, (value: T) => void] {
+  let value = initialValue;
 
   function get(): T {
     stateCallsDetector.call(get);
-    return ref.value;
+    return value;
   }
 
   const change = makeReactive<T>(get);
 
-  function set(value: T): void {
-    ref.value = value;
-    change.emit(value);
+  function set(newValue: T): void {
+    value = newValue;
+    change.emit(newValue);
   }
 
   return [get, set];
