@@ -2,7 +2,6 @@ import crypto from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { Mount } from './hooks/mount';
 import { Bridge } from './helpers/bridge';
-import { Ref } from './hooks/ref';
 
 export class RenderContext {
   readonly uuid = crypto.randomUUID();
@@ -12,8 +11,6 @@ export class RenderContext {
 }
 
 export class UserContext {
-  readonly refs = new WeakMap<Ref<any>, any>();
-
   constructor(public readonly bridge: Bridge) {}
 }
 
