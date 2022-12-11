@@ -13,9 +13,9 @@ For now, usage can be found in the 'examples' directory.
 ## Roadmap
 
 - Show component
-- Unit tests
-- Context provider
 - For component
+- Context provider
 - Watch hook
 - CSS imports
 - UUID security
+- Unit tests
