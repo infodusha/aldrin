@@ -3,3 +3,4 @@ build/
 .husky/
 
 **/*.js
+vitest.config.ts
