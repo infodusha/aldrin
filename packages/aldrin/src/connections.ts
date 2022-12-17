@@ -1,6 +1,6 @@
 import { WebSocket } from 'ws';
 import { IncomingMessage } from 'node:http';
-import { getContexts, storeContexts, unStoreRenderContext } from './store';
+import { getContexts, removeRenderContext, storeContexts, unStoreRenderContext } from './store';
 import { UserContext, userContext } from './context';
 import { Bridge } from './helpers/bridge';
 import cookie from 'cookie';
@@ -30,6 +30,7 @@ function connect(socket: WebSocket, uuid: string): void {
   const uContext = new UserContext(bridge);
   const rContext = unStoreRenderContext(uuid);
   storeContexts(socket, rContext, uContext);
+  removeRenderContext(rContext);
   userContext.run(uContext, () => {
     rContext.mount.mount();
   });
