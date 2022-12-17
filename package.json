@@ -4,6 +4,7 @@
   "scripts": {
     "build": "npm run build -w aldrin",
     "watch": "npm run watch -w aldrin",
+    "test": "npm run test -w aldrin",
     "start:example": "run-s build start:example:run",
     "start:example:run": "npm run start -w examples/counter",
     "watch:example": "run-p watch watch:example:run",
