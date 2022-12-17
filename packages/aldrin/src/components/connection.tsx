@@ -16,7 +16,7 @@ export function Connection(): JSX.Element {
   });
 
   return (
-    <script>
+    <script type="module">
       {vars}
       {script}
     </script>
