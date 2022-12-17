@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.1.1](https://github.com/infodusha/aldrin/compare/aldrin-v0.1.0...aldrin-v0.1.1) (2022-12-17)
+
+
+### Features
+
+* **core:** add vitest ([f634482](https://github.com/infodusha/aldrin/commit/f634482030fcd17ce3de0efaeb192d32f7dfc328))
+* **core:** async components ([1b9c1e6](https://github.com/infodusha/aldrin/commit/1b9c1e6f7a795a41c62e19e8bbf65ddc270cbf50))
+* **core:** config has defaults ([3e58ea6](https://github.com/infodusha/aldrin/commit/3e58ea62edff27b4f5f2d556a6590b8ff57d12a5))
+* **core:** config refactor + optional ([0c189c8](https://github.com/infodusha/aldrin/commit/0c189c842a83e83aa48a935c8d414e0e8ccda999))
+* **core:** reactive and computed ([0ef321d](https://github.com/infodusha/aldrin/commit/0ef321de8b53fc9ad80a384eeaf4b310aafaa574))
+* **core:** reactive and computed ([f7e1e99](https://github.com/infodusha/aldrin/commit/f7e1e99f12930c08e9954c1cef6edc42ad09a795))
+* **core:** refs not needed ([e3303e1](https://github.com/infodusha/aldrin/commit/e3303e1d33bd430fb3ae2ece353ae29a6679b977))
+* **core:** state can be computed + render per person ([7bcb379](https://github.com/infodusha/aldrin/commit/7bcb379567cd06cabca64d4d3df845af7a98e51c))
+* **test:** add test in ci ([d20d86c](https://github.com/infodusha/aldrin/commit/d20d86c5cf4bfdb46e9c3ad4131e9ed82339e39d))
+
+
+### Bug Fixes
+
+* **computed:** small refactor ([eb7e69e](https://github.com/infodusha/aldrin/commit/eb7e69e6b49e674831a62cf603828e585f0c4d4d))
+* **connections:** cleanup render context on connection ([b04dab1](https://github.com/infodusha/aldrin/commit/b04dab152b1c43232a9b8e2c3ed86565d6bb200b))
+* **connection:** set type module for isolation ([3738087](https://github.com/infodusha/aldrin/commit/3738087aaf83ec52bee22fa8759ead4d174585c5))
+* **core:** make mount hook simple ([4aec8db](https://github.com/infodusha/aldrin/commit/4aec8dbb5321c4444899ddbae8744dc9a04b9e32))
+* **core:** refs not needed ([6147177](https://github.com/infodusha/aldrin/commit/614717784abc63cb6885082bf8809cc9a301b7fb))
+* **reactive:** refactor ([ca457fc](https://github.com/infodusha/aldrin/commit/ca457fcfc1a8697a52745a9afca8382478b20bb8))
+* **reactive:** remove AnyFunction type ([237096f](https://github.com/infodusha/aldrin/commit/237096ff22cbf8b4b0db25d4416410f5ae8fe86c))
+* **reactive:** update only target ([4cfe48f](https://github.com/infodusha/aldrin/commit/4cfe48fd2553f132bfd4b4f7e39ac6be1b946e62))
+* **script:** add protocol and location ([bb64e53](https://github.com/infodusha/aldrin/commit/bb64e530a64fd6a6f0bbbceff51b776a6803d5a2))
+* **single-event-emitter:** remove loops ([d946e92](https://github.com/infodusha/aldrin/commit/d946e92b835543ac8b4a90ad989aca54621429ef))
+
 ## [0.1.0](https://github.com/infodusha/aldrin/compare/aldrin-v0.0.10...aldrin-v0.1.0) (2022-11-17)
 
 

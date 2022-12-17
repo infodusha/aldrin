@@ -1,6 +1,6 @@
 {
   "name": "aldrin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Single Page Applications running on the server side.",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
