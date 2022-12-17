@@ -1,4 +1,5 @@
-const socket = new WebSocket(`ws://localhost:${port}`);
+const protocol = location.protocol.includes('https') ? 'wss' : 'ws';
+const socket = new WebSocket(`${protocol}://${location.hostname}:${port}`);
 
 socket.addEventListener('message', ({ data }) => {
   const [event, ...args] = JSON.parse(data);
