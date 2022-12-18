@@ -1,4 +1,4 @@
-import { useState, useWatch } from "aldrin";
+import { useEffect, useState } from "aldrin";
 import { Layout } from "./Layout";
 import * as console from "console";
 
@@ -7,9 +7,9 @@ let counter = 0;
 export function App(): JSX.Element {
   const [clicks, setClicks] = useState(counter);
 
-  useWatch(() => {
+  useEffect(() => {
     console.log(clicks());
-  }, [clicks]);
+  });
 
   function handleClick() {
     counter++;

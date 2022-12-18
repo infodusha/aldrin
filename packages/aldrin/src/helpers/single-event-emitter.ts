@@ -27,7 +27,7 @@ export class SingleEventEmitter<T> {
     signal.addEventListener('abort', clear);
   }
 
-  static mergeOnce(cb: () => void, emitters: Array<SingleEventEmitter<any>>): void {
+  static mergeOnce(cb: () => void, emitters: Array<SingleEventEmitter<any>>): AbortController {
     const abortController = new AbortController();
     SingleEventEmitter.merge(
       () => {
@@ -37,6 +37,7 @@ export class SingleEventEmitter<T> {
       emitters,
       abortController.signal
     );
+    return abortController;
   }
 
   addListener(listener: (value: T) => void): void {

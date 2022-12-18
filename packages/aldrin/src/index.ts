@@ -52,4 +52,5 @@ function throwIfNoBody(context: RenderContext): void {
 export { useMount } from './hooks/mount';
 export { useState } from './hooks/state';
 export { useWatch } from './hooks/watch';
+export { useEffect } from './hooks/effect';
 export { Show } from './components/show';
