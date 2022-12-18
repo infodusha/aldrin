@@ -4,6 +4,41 @@ export class SingleEventEmitter<T> {
   protected readonly listeners = new Set<(value: T) => void>();
   protected readonly wrappers = new WeakMap<(value: T) => void, (value: T) => void>();
 
+  static merge(
+    cb: () => void,
+    emitters: Array<SingleEventEmitter<any>>,
+    signal: AbortSignal
+  ): void {
+    if (signal.aborted) {
+      throw new Error('Signal is aborted');
+    }
+
+    for (const emitter of emitters) {
+      emitter.addListener(cb);
+    }
+
+    function clear(): void {
+      for (const emitter of emitters) {
+        emitter.removeListener(cb);
+      }
+      signal.removeEventListener('abort', clear);
+    }
+
+    signal.addEventListener('abort', clear);
+  }
+
+  static mergeOnce(cb: () => void, emitters: Array<SingleEventEmitter<any>>): void {
+    const abortController = new AbortController();
+    SingleEventEmitter.merge(
+      () => {
+        abortController.abort();
+        cb();
+      },
+      emitters,
+      abortController.signal
+    );
+  }
+
   addListener(listener: (value: T) => void): void {
     this.listeners.add(listener);
   }
@@ -32,9 +67,5 @@ export class SingleEventEmitter<T> {
     for (const listener of listeners) {
       listener(value);
     }
-  }
-
-  clearListeners(): void {
-    this.listeners.clear();
   }
 }

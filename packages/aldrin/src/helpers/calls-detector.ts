@@ -1,6 +1,6 @@
 export interface Detection<T, R> {
   result: R;
-  calls: Set<T>;
+  calls: readonly T[];
 }
 
 export class CallsDetector<T> {
@@ -10,7 +10,7 @@ export class CallsDetector<T> {
   detect<R>(fn: () => R): Detection<T, R> {
     this.setEnabled(true);
     const result = fn();
-    const calls = new Set(this.calls);
+    const calls = [...this.calls];
     this.setEnabled(false);
     return { result, calls };
   }

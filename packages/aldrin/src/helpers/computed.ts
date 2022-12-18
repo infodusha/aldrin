@@ -1,33 +1,20 @@
 import { getReactiveChange, isReactive, makeReactive } from './reactive';
 import { stateCallsDetector } from '../hooks/state';
+import { SingleEventEmitter } from './single-event-emitter';
 
 export function makeComputed<T>(fn: () => T): () => T {
   if (isReactive(fn)) {
     return fn;
   }
 
-  let lastCalls: Set<() => T>;
-
-  function clear(): void {
-    lastCalls.forEach((reactive) => {
-      const change = getReactiveChange(reactive);
-      change.removeListener(handleChange);
-    });
-    lastCalls.clear();
-  }
-
   function getValue(): T {
     const { result, calls } = stateCallsDetector.detect(fn);
-    if (calls.size === 0) {
+    if (calls.length === 0) {
       console.warn(`No states for computed ${fn.toString()}`);
     }
 
-    lastCalls = new Set(calls);
-
-    calls.forEach((reactive) => {
-      const change = getReactiveChange(reactive);
-      change.once(handleChange);
-    });
+    const changes = calls.map((reactive) => getReactiveChange(reactive));
+    SingleEventEmitter.mergeOnce(handleChange, changes);
 
     return result;
   }
@@ -35,7 +22,6 @@ export function makeComputed<T>(fn: () => T): () => T {
   const change = makeReactive(getValue);
 
   function handleChange(): void {
-    clear();
     const value = getValue();
     change.emit(value);
   }
