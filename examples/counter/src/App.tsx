@@ -1,6 +1,5 @@
 import { useEffect, useState } from "aldrin";
 import { Layout } from "./Layout";
-import * as console from "console";
 
 let counter = 0;
 

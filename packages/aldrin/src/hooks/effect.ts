@@ -22,7 +22,9 @@ export function useEffect(fn: EffectFn): void {
 
     return () => {
       abortController.abort();
-      lastResult?.();
+      if (typeof lastResult === 'function') {
+        lastResult();
+      }
     };
   });
 }
