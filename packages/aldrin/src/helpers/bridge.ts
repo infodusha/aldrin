@@ -19,6 +19,10 @@ export class Bridge {
     this.send('removeElement', parentId, nodeIndex, nodeCount);
   }
 
+  patchProp(targetId: string, key: string, value: string): void {
+    this.send('patchProp', targetId, key, value);
+  }
+
   private send(event: string, ...args: unknown[]): void {
     this.socket.send(JSON.stringify([event, ...args]));
   }

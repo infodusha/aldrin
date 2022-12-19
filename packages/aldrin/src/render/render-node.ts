@@ -54,16 +54,27 @@ export class RenderNode {
     throw new Error('Unsupported property value type ' + typeof value);
   }
 
-  private renderPropFunction(key: string, value: (...args: unknown[]) => any): string {
+  private bindReactiveProp(reactive: () => string, key: string): string {
+    const fn = makeComputed<string>(reactive);
+    const change = getReactiveChange(fn);
+
+    change.addListener(() => {
+      const newValue = fn();
+      const uContext = userContext.get();
+      uContext.bridge.patchProp(this.id, key, newValue);
+    });
+
+    return fn();
+  }
+
+  private renderPropFunction(key: string, fn: (...args: unknown[]) => any): string {
     if (key.startsWith('on')) {
       const context = renderContext.get();
-      context.events.set(this.id + key, value);
+      context.events.set(this.id + key, fn);
       return `${key}="onEvent('${key}', this)"`;
     } else {
-      throw new Error('Unimplemented yet');
-      // TODO
-      // const fn = bindReactiveToRenderTreeItem(value, () => this.tree);
-      // return fn();
+      const value = this.bindReactiveProp(fn, key);
+      return `${key}="${value}"`;
     }
   }
 

@@ -15,9 +15,15 @@ export async function App(): JSX.AsyncElement {
     setClicks(counter);
   }
 
+  function getTitle(): string {
+    return `Go with ${clicks() + 1}`;
+  }
+
   return (
     <Layout>
-      <button onclick={handleClick}>Click me</button>
+      <button onclick={handleClick} title={getTitle}>
+        Click me
+      </button>
       <div>Clicks: {clicks}</div>
     </Layout>
   );

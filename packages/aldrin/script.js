@@ -13,6 +13,9 @@ socket.addEventListener('message', ({ data }) => {
     case 'removeElement':
       removeElement(...args);
       break;
+    case 'patchProp':
+      patchProp(...args);
+      break;
   }
 });
 
@@ -47,6 +50,11 @@ function removeElement(parentId, nodeIndex, nodeCount) {
   getChildren(parentId)
     .slice(nodeIndex, nodeIndex + nodeCount)
     .forEach((child) => child.remove());
+}
+
+function patchProp(targetId, key, value) {
+  const parent = document.getElementById(targetId);
+  parent.setAttribute(key, value);
 }
 
 function onEvent(key, item) {
