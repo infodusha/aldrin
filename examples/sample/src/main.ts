@@ -1,7 +1,7 @@
 import http from "node:http";
 
 import { App } from "./App";
-import { renderPage, serveWebSocket } from "aldrin";
+import { bootstrap, renderPage } from "aldrin";
 
 const host = "localhost";
 const port = 8080;
@@ -18,4 +18,4 @@ http
     console.log(`App started on: http://${host}:${port}`);
   });
 
-serveWebSocket();
+bootstrap().catch(console.error);

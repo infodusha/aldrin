@@ -15,6 +15,7 @@ For now, usage can be found in the 'examples' directory.
 - Show component
 - For component
 - Context provider
+- User selection abstraction
 - CSS imports
 - UUID security
 - Unit tests

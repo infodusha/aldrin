@@ -45,17 +45,18 @@ type DOMElement = Element;
 declare global {
   namespace JSX {
     type FunctionMaybe<T = unknown> = (() => T) | T;
-    type AsyncElement = Promise<Exclude<Element, Promise<Element>>>;
-    type Element =
+    type AsyncElement = Promise<SyncElement>;
+    type SyncElement =
       | Node
       | ArrayElement
-      | Promise<Element>
-      | FunctionElement
+      | ReactiveElement
       | (string & {})
       | number
       | boolean
       | null
       | undefined;
+
+    type Element = AsyncElement | SyncElement;
 
     interface Node {
       type: string;
@@ -65,7 +66,7 @@ declare global {
 
     interface ArrayElement extends Array<Element> {}
 
-    type FunctionElement = () => Element;
+    type ReactiveElement = () => string | number | boolean | null | undefined;
 
     interface ElementClass {
       // empty, libs can define requirements downstream

@@ -1,8 +1,6 @@
-import { useMount } from '../hooks/mount';
 import { RenderContext, renderContext } from '../context';
 import { render } from '../render';
-import { makeComputed } from '../helpers/computed';
-import { getReactiveChange } from '../helpers/reactive';
+import { useEffect } from '../hooks/effect';
 
 interface ShowProps {
   when: () => boolean;
@@ -11,10 +9,7 @@ interface ShowProps {
 }
 
 export async function Show(props: ShowProps): JSX.AsyncElement {
-  const when = makeComputed(props.when);
-  const initial = when();
-  const change = getReactiveChange(when);
-
+  let isVisible = props.when();
   const rContextChildren = new RenderContext();
   const rContextFallback = new RenderContext();
 
@@ -24,45 +19,24 @@ export async function Show(props: ShowProps): JSX.AsyncElement {
       ? await renderContext.run(rContextFallback, () => render(props.fallback))
       : null;
 
-  useMount(() => {
-    let value = initial;
+  function getActiveContext(): RenderContext {
+    return isVisible ? rContextChildren : rContextFallback;
+  }
 
-    function handleChange(newValue: boolean): void {
-      if (newValue === value) {
-        return;
-      }
-      value = newValue;
-      if (newValue) {
-        rContextFallback.mount.unMount();
-
-        // TODO - create elements
-        // const uContext = userContext.get();
-        // uContext.bridge.createElement(children, parentId, nodeIndex);
-
-        rContextChildren.mount.mount();
-      } else {
-        rContextChildren.mount.unMount();
-        rContextFallback.mount.mount();
-      }
+  useEffect(() => {
+    const newIsVisible = props.when();
+    if (newIsVisible === isVisible) {
+      return;
     }
+    getActiveContext().mount.unMount();
+    isVisible = newIsVisible;
+    getActiveContext().mount.mount();
 
-    if (value) {
-      rContextChildren.mount.mount();
-    } else {
-      rContextFallback.mount.mount();
-    }
+    // const uContext = userContext.get();
+    // uContext.bridge.createElement(children, parentId, nodeIndex);
 
-    change.addListener(handleChange);
-
-    return () => {
-      change.removeListener(handleChange);
-      if (value) {
-        rContextChildren.mount.unMount();
-      } else {
-        rContextFallback.mount.unMount();
-      }
-    };
+    return () => getActiveContext().mount.unMount();
   });
 
-  return initial ? children : fallback;
+  return isVisible ? children : fallback;
 }

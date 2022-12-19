@@ -1,6 +1,7 @@
 import { join } from 'node:path';
 import { readFileSync } from 'node:fs';
 import { config } from '../config.js';
+import { render } from '../render';
 
 const script = readFileSync(join(__dirname, '../../script.js'), 'utf-8');
 
@@ -21,4 +22,13 @@ export function Connection(): JSX.Element {
       {script}
     </script>
   );
+}
+
+let connectionStr = '';
+export function getConnectionStr(): string {
+  return connectionStr;
+}
+
+export async function setConnectionStr(): Promise<void> {
+  connectionStr = await render(Connection());
 }

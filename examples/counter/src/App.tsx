@@ -3,7 +3,7 @@ import { Layout } from "./Layout";
 
 let counter = 0;
 
-export function App(): JSX.Element {
+export async function App(): JSX.AsyncElement {
   const [clicks, setClicks] = useState(counter);
 
   useEffect(() => {

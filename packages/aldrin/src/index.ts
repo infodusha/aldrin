@@ -6,6 +6,7 @@ import * as http from 'node:http';
 import cookie from 'cookie';
 import { removeRenderContext, storeRenderContext } from './store';
 import { config } from './config';
+import { setConnectionStr } from './components/connection';
 
 function serve(
   html: string,
@@ -37,10 +38,11 @@ export async function renderPage(
   }, config.connectionTimeoutMs);
 }
 
-export function serveWebSocket(): void {
+export async function bootstrap(): Promise<void> {
   const port = config.port;
   const wss = new WebSocketServer({ port });
   wss.on('connection', handleConnection);
+  await setConnectionStr();
 }
 
 function throwIfNoBody(context: RenderContext): void {
