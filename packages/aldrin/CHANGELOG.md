@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.2](https://github.com/infodusha/aldrin/compare/aldrin-v0.1.1...aldrin-v0.1.2) (2022-12-22)
+
+
+### Features
+
+* **core:** add useEffect hock ([4d6cf37](https://github.com/infodusha/aldrin/commit/4d6cf37511d2439323a8dfbaf0ad93cab245ec3a))
+* **core:** add watch hook ([d98d4c0](https://github.com/infodusha/aldrin/commit/d98d4c0b97a83eba9c8a178eecb3dc7b650929d1))
+* **core:** escape strings & unsafe function ([610ace7](https://github.com/infodusha/aldrin/commit/610ace7727c0a6c43ac888a86fd3429826b75470))
+* **core:** props can be reactive ([da56684](https://github.com/infodusha/aldrin/commit/da56684e0764f0befe7c43364a7653558bbc4d3a))
+* **core:** refactor renderer ([957196b](https://github.com/infodusha/aldrin/commit/957196b700139265155af77aa6478a3909d7e094))
+
+
+### Bug Fixes
+
+* **build:** remove sourcemap & fix readme publish ([9e36307](https://github.com/infodusha/aldrin/commit/9e36307ad93a62f71f481f04c3f055d52b5a43a6))
+* **useEffect:** check if unMount is function ([9417329](https://github.com/infodusha/aldrin/commit/9417329601958a18c1d2de2aee2c06ab0f1e133f))
+
 ## [0.1.1](https://github.com/infodusha/aldrin/compare/aldrin-v0.1.0...aldrin-v0.1.1) (2022-12-17)
 
 
