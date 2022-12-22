@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 import { readFileSync } from 'node:fs';
-import { config } from '../config.js';
-import { render } from '../render';
+import { config } from '../config';
+import { render, unsafe } from '../render/';
 
 const script = readFileSync(join(__dirname, '../../script.js'), 'utf-8');
 
@@ -18,8 +18,8 @@ export function Connection(): JSX.Element {
 
   return (
     <script type="module">
-      {vars}
-      {script}
+      {unsafe(vars)}
+      {unsafe(script)}
     </script>
   );
 }

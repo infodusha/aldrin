@@ -8,7 +8,8 @@
     "test:e2e": "npm run build && npm run test -w examples/e2e",
     "start:counter": "npm run build && npm run start -w examples/counter",
     "watch:counter": "npm run watch && npm run watch:example:run",
-    "watch:counter:run": "cd examples/counter && nodemon src/main.ts --watch src/* --watch ../../packages/aldrin/build --delay 1"
+    "watch:counter:run": "cd examples/counter && nodemon src/main.ts --watch src/* --watch ../../packages/aldrin/build --delay 1",
+    "start:sample": "npm run build && npm run start -w examples/sample"
   },
   "workspaces": [
     "packages/*",

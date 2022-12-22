@@ -1,5 +1,5 @@
 import { RenderContext, renderContext } from '../context';
-import { render } from '../render';
+import { render, unsafe } from '../render/';
 import { useEffect } from '../hooks/effect';
 
 interface ShowProps {
@@ -38,5 +38,5 @@ export async function Show(props: ShowProps): JSX.AsyncElement {
     return () => getActiveContext().mount.unMount();
   });
 
-  return isVisible ? children : fallback;
+  return unsafe(isVisible ? children : fallback ?? '');
 }

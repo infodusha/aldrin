@@ -50,6 +50,7 @@ declare global {
       | Node
       | ArrayElement
       | ReactiveElement
+      | UnsafeString
       | (string & {})
       | number
       | boolean
@@ -62,6 +63,10 @@ declare global {
       type: string;
       props?: Record<string, FunctionMaybe>;
       children?: Element;
+    }
+
+    interface UnsafeString {
+      unsafe: string;
     }
 
     interface ArrayElement extends Array<Element> {}

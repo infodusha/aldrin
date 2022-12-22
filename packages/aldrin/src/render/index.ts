@@ -17,6 +17,14 @@ export type TreeItem =
   | TreeNode
   | TreeItem[];
 
+function isNode(item: JSX.Element): item is JSX.Node {
+  return typeof item === 'object' && item !== null && 'type' in item;
+}
+
+function isUnsafeString(item: JSX.Element): item is JSX.UnsafeString {
+  return typeof item === 'object' && item !== null && 'unsafe' in item;
+}
+
 async function buildTree(item: JSX.Element, parent?: TreeNode): Promise<TreeItem> {
   if (item instanceof Promise) {
     const data = await item;
@@ -25,7 +33,7 @@ async function buildTree(item: JSX.Element, parent?: TreeNode): Promise<TreeItem
   if (Array.isArray(item)) {
     return await Promise.all(item.map((i) => buildTree(i, parent)));
   }
-  if (typeof item === 'object' && item !== null) {
+  if (isNode(item)) {
     const children = item.children ?? [];
     const childrenArr = Array.isArray(children) ? children : [children];
     const childrenTree: TreeItem[] = [];
@@ -57,13 +65,27 @@ export function renderTree(item: TreeItem, parent?: RenderNode): string {
     const result = renderTree(fn(), parent);
     return `<!-- -->${result}<!-- -->`; // Make sure that will be a different node
   }
-  if (typeof item === 'object') {
+  if (isNode(item)) {
     const renderNode = new RenderNode(item);
     return renderNode.render();
+  }
+  if (isUnsafeString(item)) {
+    return item.unsafe;
+  }
+  if (typeof item === 'string') {
+    return escapeHtml(item);
   }
   return item.toString();
 }
 
 export function findChildIndex(parent: TreeNode, item: TreeItem): number {
   return parent.children.findIndex((c) => c === item);
+}
+
+export function unsafe(str: string): JSX.UnsafeString {
+  return { unsafe: str };
+}
+
+function escapeHtml(html: string): string {
+  return html.replace(/[^0-9A-Za-z ]/g, (c) => `&#${c.charCodeAt(0)};`);
 }
