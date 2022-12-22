@@ -5,10 +5,10 @@
     "build": "npm run build -w aldrin",
     "watch": "npm run watch -w aldrin",
     "test": "npm run test -w aldrin",
-    "start:example": "run-s build start:example:run",
-    "start:example:run": "npm run start -w examples/counter",
-    "watch:example": "run-p watch watch:example:run",
-    "watch:example:run": "cd examples/counter && nodemon src/main.ts --watch src/* --watch ../../packages/aldrin/build --delay 1"
+    "test:e2e": "npm run build && npm run test -w examples/e2e",
+    "start:counter": "npm run build && npm run start -w examples/counter",
+    "watch:counter": "npm run watch && npm run watch:example:run",
+    "watch:counter:run": "cd examples/counter && nodemon src/main.ts --watch src/* --watch ../../packages/aldrin/build --delay 1"
   },
   "workspaces": [
     "packages/*",
