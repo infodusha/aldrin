@@ -5,7 +5,7 @@
     "rootDir": "src",
     "allowSyntheticDefaultImports": true,
     "outDir": "build",
-    "sourceMap": true,
+    "sourceMap": false,
     "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
