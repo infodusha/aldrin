@@ -58,8 +58,7 @@ export class RenderNode {
     const fn = makeComputed<string>(reactive);
     const change = getReactiveChange(fn);
 
-    change.addListener(() => {
-      const newValue = fn();
+    change.addListener((newValue) => {
       const uContext = userContext.get();
       uContext.bridge.patchProp(this.id, key, newValue);
     });
