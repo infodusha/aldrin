@@ -14,7 +14,7 @@ export class UserContext {
   constructor(public readonly bridge: Bridge) {}
 }
 
-class Context<T> {
+export class Context<T> {
   private readonly value = new AsyncLocalStorage<T>();
 
   has(): boolean {
