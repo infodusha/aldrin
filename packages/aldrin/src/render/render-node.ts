@@ -48,7 +48,7 @@ export class RenderNode {
       return `${key}="${value.toString()}"`;
     }
     if (typeof value === 'function') {
-      return this.renderPropFunction(key, value as (...args: unknown[]) => any);
+      return this.renderPropFunction(key, value as () => unknown);
     }
     throw new Error('Unsupported property value type ' + typeof value);
   }
@@ -60,7 +60,8 @@ export class RenderNode {
     });
   }
 
-  private renderPropFunction(key: string, fn: (...args: unknown[]) => any): string {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private renderPropFunction(key: string, fn: () => any): string {
     if (key.startsWith('on')) {
       const context = renderContext.get();
       context.events.set(this.id + key, fn);

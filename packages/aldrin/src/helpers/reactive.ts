@@ -2,7 +2,7 @@ import { Observable, Subject } from 'rxjs';
 import { definedOrThrow } from './defined-or-throw';
 import { useCleanup } from '../hooks/mount';
 
-const reactiveMetadataMap = new WeakMap<() => unknown, Observable<any>>();
+const reactiveMetadataMap = new WeakMap<() => unknown, Observable<unknown>>();
 
 export function makeReactive<T>(fn: () => T): Subject<T> {
   const change = new Subject<T>();
@@ -21,5 +21,5 @@ export function getReactiveChange<T>(fn: () => T): Observable<T> {
   }
   const change = reactiveMetadataMap.get(fn);
   definedOrThrow(change);
-  return change;
+  return change as Observable<T>;
 }

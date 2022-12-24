@@ -1,7 +1,7 @@
 import { makeReactive } from '../helpers/reactive';
 import { CallsDetector } from '../helpers/calls-detector';
 
-export const stateCallsDetector = new CallsDetector<() => any>();
+export const stateCallsDetector = new CallsDetector<() => unknown>();
 
 /*
   Creates a tuple `[get, set]`, bound to user
