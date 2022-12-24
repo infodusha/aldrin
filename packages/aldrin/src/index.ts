@@ -1,19 +1,16 @@
+import * as http from 'node:http';
+import crypto from 'node:crypto';
+import cookie from 'cookie';
+
 import { render } from './render';
 import { RenderContext, renderContext } from './context';
 import { WebSocketServer } from 'ws';
-import { handleConnection } from './connections';
-import * as http from 'node:http';
-import cookie from 'cookie';
+import { Connection } from './connection';
 import { removeRenderContext, storeRenderContext } from './store';
 import { config } from './config';
 import { setConnectionStr } from './components/connection';
 
-function serve(
-  html: string,
-  context: RenderContext,
-  res: http.ServerResponse<http.IncomingMessage>
-): void {
-  const uuid = context.uuid;
+function serve(html: string, uuid: string, res: http.ServerResponse<http.IncomingMessage>): void {
   const cookies = cookie.serialize('uuid', uuid, { httpOnly: true });
   res.writeHead(200, {
     'Content-Type': 'text/html',
@@ -31,8 +28,9 @@ export async function renderPage(
     return render(component());
   });
   throwIfNoBody(context);
-  storeRenderContext(context);
-  serve(html, context, res);
+  const uuid = crypto.randomUUID();
+  storeRenderContext(uuid, context);
+  serve(html, uuid, res);
   setTimeout(() => {
     removeRenderContext(context);
   }, config.connectionTimeoutMs);
@@ -41,7 +39,14 @@ export async function renderPage(
 export async function bootstrap(): Promise<void> {
   const port = config.port;
   const wss = new WebSocketServer({ port });
-  wss.on('connection', handleConnection);
+  wss.on('connection', (socket, req) => {
+    const connection = Connection.fromSocket(socket, req);
+    connection.init();
+  });
+  await new Promise<void>((resolve, reject) => {
+    wss.on('listening', resolve);
+    wss.on('error', reject);
+  });
   await setConnectionStr();
 }
 
