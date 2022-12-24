@@ -1,18 +1,17 @@
-import { useEffect, useState } from "aldrin";
+import { createSharedState, useEffect, useSharedState } from "aldrin";
 import { Layout } from "./Layout";
 
-let counter = 0;
+const counter = createSharedState(0);
 
 export async function App(): JSX.AsyncElement {
-  const [clicks, setClicks] = useState(counter);
+  const [clicks, setClicks] = useSharedState(counter);
 
   useEffect(() => {
     console.log(clicks());
   });
 
   function handleClick() {
-    counter++;
-    setClicks(counter);
+    setClicks(clicks() + 1);
   }
 
   function getTitle(): string {

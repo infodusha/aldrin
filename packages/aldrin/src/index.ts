@@ -60,5 +60,6 @@ export { useMount } from './hooks/mount';
 export { useState } from './hooks/state';
 export { useEffect } from './hooks/effect';
 export { useAsync } from './hooks/async';
+export { useSharedState, createSharedState } from './hooks/shared-state';
 export { Show } from './components/show';
 export { unsafe } from './render/';
