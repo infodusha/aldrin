@@ -1,11 +1,13 @@
-import { SingleEventEmitter } from './single-event-emitter';
+import { Observable, Subject } from 'rxjs';
 import { definedOrThrow } from './defined-or-throw';
+import { useCleanup } from '../hooks/mount';
 
-const reactiveMetadataMap = new WeakMap<() => unknown, SingleEventEmitter<any>>();
+const reactiveMetadataMap = new WeakMap<() => unknown, Observable<any>>();
 
-export function makeReactive<T>(fn: () => T): SingleEventEmitter<T> {
-  const change = new SingleEventEmitter<T>();
-  reactiveMetadataMap.set(fn, change);
+export function makeReactive<T>(fn: () => T): Subject<T> {
+  const change = new Subject<T>();
+  reactiveMetadataMap.set(fn, change.asObservable());
+  useCleanup(() => change.complete());
   return change;
 }
 
@@ -13,7 +15,7 @@ export function isReactive(fn: () => unknown): boolean {
   return reactiveMetadataMap.has(fn);
 }
 
-export function getReactiveChange<T>(fn: () => T): SingleEventEmitter<T> {
+export function getReactiveChange<T>(fn: () => T): Observable<T> {
   if (!isReactive(fn)) {
     throw new Error('Not reactive');
   }

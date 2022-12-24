@@ -1,29 +1,21 @@
 import { useMount } from './mount';
-import { stateCallsDetector } from './state';
-import { getReactiveChange } from '../helpers/reactive';
-import { SingleEventEmitter } from '../helpers/single-event-emitter';
+import { makeComputed } from '../helpers/computed';
 
 type EffectFn = (() => void) | (() => () => void);
 
 export function useEffect(fn: EffectFn): void {
-  let abortController: AbortController;
-  let lastResult: ReturnType<EffectFn>;
-
-  function subscribe(): void {
-    const { result, calls } = stateCallsDetector.detect(fn);
-    lastResult = result;
-
-    const changes = calls.map((reactive) => getReactiveChange(reactive));
-    abortController = SingleEventEmitter.mergeOnce(subscribe, changes);
-  }
-
   useMount(() => {
-    subscribe();
+    const { initial, change$ } = makeComputed<ReturnType<EffectFn>>(fn);
+    let cleanup: ReturnType<EffectFn> = initial;
+
+    const subscription = change$.subscribe((newCleanup) => {
+      cleanup = newCleanup;
+    });
 
     return () => {
-      abortController.abort();
-      if (typeof lastResult === 'function') {
-        lastResult();
+      subscription.unsubscribe();
+      if (typeof cleanup === 'function') {
+        cleanup();
       }
     };
   });

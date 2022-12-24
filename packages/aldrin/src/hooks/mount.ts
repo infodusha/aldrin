@@ -4,15 +4,25 @@ type MountFn = (() => void) | (() => () => void);
 
 export function useMount(fn: MountFn): void {
   const context = renderContext.get();
-  context.mount.add(fn);
+  context.mount.addMount(fn);
+}
+
+export function useCleanup(fn: () => void): void {
+  const context = renderContext.get();
+  context.mount.addCleanup(fn);
 }
 
 export class Mount {
   private readonly mounts = new Set<MountFn>();
   private readonly unMounts = new Set<() => void>();
+  private readonly cleanups = new Set<() => void>();
 
-  add(fn: MountFn): void {
+  addMount(fn: MountFn): void {
     this.mounts.add(fn);
+  }
+
+  addCleanup(fn: () => void): void {
+    this.cleanups.add(fn);
   }
 
   mount(): void {
@@ -27,5 +37,6 @@ export class Mount {
   unMount(): void {
     this.unMounts.forEach((fn) => fn());
     this.unMounts.clear();
+    this.cleanups.forEach((fn) => fn());
   }
 }

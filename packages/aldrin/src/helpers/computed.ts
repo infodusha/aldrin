@@ -1,30 +1,42 @@
-import { getReactiveChange, isReactive, makeReactive } from './reactive';
+import { merge, Observable, startWith, switchMap, take } from 'rxjs';
+import { getReactiveChange, isReactive } from './reactive';
 import { stateCallsDetector } from '../hooks/state';
-import { SingleEventEmitter } from './single-event-emitter';
+import { useCleanup } from '../hooks/mount';
 
-export function makeComputed<T>(fn: () => T): () => T {
+export interface Computed<T> {
+  initial: T;
+  change$: Observable<T>;
+}
+
+export function makeComputed<T>(fn: () => T): Computed<T> {
   if (isReactive(fn)) {
-    return fn;
+    return {
+      initial: fn(),
+      change$: getReactiveChange(fn),
+    };
   }
 
-  function getValue(): T {
-    const { result, calls } = stateCallsDetector.detect(fn);
-    if (calls.length === 0) {
-      console.warn(`No states for computed ${fn.toString()}`);
-    }
-
-    const changes = calls.map((reactive) => getReactiveChange(reactive));
-    SingleEventEmitter.mergeOnce(handleChange, changes);
-
-    return result;
+  function getComputed(): Computed<T> {
+    const { result: initial, calls } = stateCallsDetector.detect(fn);
+    const changes = calls.map((reactive) => getReactiveChange<unknown>(reactive));
+    return {
+      initial,
+      change$: merge(...changes).pipe(
+        take(1),
+        switchMap(() => {
+          const computed = getComputed();
+          return computed.change$.pipe(startWith(computed.initial));
+        })
+      ),
+    };
   }
 
-  const change = makeReactive(getValue);
+  return getComputed();
+}
 
-  function handleChange(): void {
-    const value = getValue();
-    change.emit(value);
-  }
-
-  return getValue;
+export function setComputedListener<T>(fn: () => T, onChange: (value: T) => void): T {
+  const { initial, change$ } = makeComputed<T>(fn);
+  const subscription = change$.subscribe(onChange);
+  useCleanup(() => subscription.unsubscribe());
+  return initial;
 }

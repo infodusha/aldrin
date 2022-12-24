@@ -3,6 +3,7 @@ export interface Detection<T, R> {
   calls: readonly T[];
 }
 
+// TODO bind to own context for async cases
 export class CallsDetector<T> {
   private readonly calls = new Set<T>();
   private inEnabled = false;

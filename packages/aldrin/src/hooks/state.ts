@@ -20,7 +20,7 @@ export function useState<T>(initialValue: T): [() => T, (value: T) => void] {
 
   function set(newValue: T): void {
     value = newValue;
-    change.emit(newValue);
+    change.next(newValue);
   }
 
   return [get, set];

@@ -61,8 +61,8 @@ export function renderTree(item: TreeItem, parent?: RenderNode): string {
     if (parent == null) {
       throw new Error('Unable to render function without parent');
     }
-    const fn = parent.bindReactive(item);
-    const result = renderTree(fn(), parent);
+    const value = parent.bindReactive(item);
+    const result = renderTree(value, parent);
     return `<!-- -->${result}<!-- -->`; // Make sure that will be a different node
   }
   if (isNode(item)) {

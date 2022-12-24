@@ -1,8 +1,7 @@
 import crypto from 'node:crypto';
 import { renderContext, userContext } from '../context';
 import { findChildIndex, renderTree, TreeNode, render } from './index';
-import { makeComputed } from '../helpers/computed';
-import { getReactiveChange } from '../helpers/reactive';
+import { setComputedListener } from '../helpers/computed';
 import { getConnectionStr } from '../components/connection';
 
 const singleTags: Readonly<string[]> = ['meta', 'img', 'br', 'hr', 'input'];
@@ -55,15 +54,10 @@ export class RenderNode {
   }
 
   private bindReactiveProp(reactive: () => string, key: string): string {
-    const fn = makeComputed<string>(reactive);
-    const change = getReactiveChange(fn);
-
-    change.addListener((newValue) => {
+    return setComputedListener(reactive, (value) => {
       const uContext = userContext.get();
-      uContext.bridge.patchProp(this.id, key, newValue);
+      uContext.bridge.patchProp(this.id, key, value);
     });
-
-    return fn();
   }
 
   private renderPropFunction(key: string, fn: (...args: unknown[]) => any): string {
@@ -77,14 +71,11 @@ export class RenderNode {
     }
   }
 
-  bindReactive(reactive: JSX.ReactiveElement): JSX.ReactiveElement {
-    const fn = makeComputed<ReturnType<JSX.ReactiveElement>>(reactive);
+  bindReactive(reactive: JSX.ReactiveElement): ReturnType<JSX.ReactiveElement> {
     const rContext = renderContext.get();
-    const change = getReactiveChange(fn);
-
-    change.addListener((value) => {
-      const index = findChildIndex(this.item, reactive);
+    return setComputedListener(reactive, (value) => {
       const uContext = userContext.get();
+      const index = findChildIndex(this.item, reactive);
       renderContext
         .run(rContext, () => render(value))
         .then((html) => {
@@ -92,8 +83,6 @@ export class RenderNode {
         })
         .catch(console.error);
     });
-
-    return fn;
   }
 
   render(): string {
