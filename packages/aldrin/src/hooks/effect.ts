@@ -8,15 +8,20 @@ export function useEffect(fn: EffectFn): void {
     const { initial, change$ } = makeComputed<ReturnType<EffectFn>>(fn);
     let cleanup: ReturnType<EffectFn> = initial;
 
+    function callCleanup(): void {
+      if (typeof cleanup === 'function') {
+        cleanup();
+      }
+    }
+
     const subscription = change$.subscribe((newCleanup) => {
+      callCleanup();
       cleanup = newCleanup;
     });
 
     return () => {
       subscription.unsubscribe();
-      if (typeof cleanup === 'function') {
-        cleanup();
-      }
+      callCleanup();
     };
   });
 }
