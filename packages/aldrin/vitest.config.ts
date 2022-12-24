@@ -4,9 +4,8 @@ export default defineConfig({
   test: {
     watchExclude: ['**/node_modules/**', '**/dist/**', 'README.md'],
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    deps: {
-      inline: true,
-      interopDefault: true,
+    alias: {
+      'aldrin/jsx-runtime': './src/jsx-runtime.ts',
     },
   },
 });
