@@ -10,7 +10,8 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "aldrin": "*"
+    "aldrin": "*",
+    "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.29.0",
