@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.2.0](https://github.com/infodusha/aldrin/compare/aldrin-v0.1.2...aldrin-v0.2.0) (2022-12-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** rxjs now peer dependency
+
+### Features
+
+* **core:** create shared state hook ([badd88d](https://github.com/infodusha/aldrin/commit/badd88ddaec7c10c27670d18d2f50b087b749173))
+* **core:** partially create Show component ([cc15f5a](https://github.com/infodusha/aldrin/commit/cc15f5ae5e5929f470f2f78fbb8bd7d55c12607b))
+* **core:** refactor connections & store ([742111f](https://github.com/infodusha/aldrin/commit/742111f61b9c0252aab9bd4b4f9d0ae534677396))
+* **core:** rxjs now peer dependency ([89d9229](https://github.com/infodusha/aldrin/commit/89d922962f91600fea6a57fdf3cde6591121f946))
+* **core:** use rxjs instead of event emitter ([2445d5f](https://github.com/infodusha/aldrin/commit/2445d5fef298b022e5b1463db940f1cbbdc12a68))
+* **helpers:** refactor to use context ([2ebb0fc](https://github.com/infodusha/aldrin/commit/2ebb0fce8ae3692b1b474ec306a32cda9e290410))
+
+
+### Bug Fixes
+
+* **core:** fixup tests ([638b360](https://github.com/infodusha/aldrin/commit/638b36097ae9bb3453b00ce4fb5a97e07f39319d))
+* **core:** refactor any on unknown ([5e5ed2d](https://github.com/infodusha/aldrin/commit/5e5ed2d8bd365e4d33d7977a78ebdee406af11e6))
+* **core:** remove memory leak in bindReactiveProp ([6f7f48f](https://github.com/infodusha/aldrin/commit/6f7f48fcb373feed56beb7c109fcc092b27cb9d6))
+* **core:** useEffect's cleanup should run onChange as well ([c69e696](https://github.com/infodusha/aldrin/commit/c69e696f86c32ca559323acedaed965c5f4eb3f0))
+* **core:** uuid in no more needed in context ([7ea4bba](https://github.com/infodusha/aldrin/commit/7ea4bba58e5e66bbcbcae66b326c728586353426))
+* **test:** a try to update vitest ([8d905d1](https://github.com/infodusha/aldrin/commit/8d905d1ea0053bd81d4723fcb152bc6a7f1e3a64))
+* **test:** a try to update vitest 2 ([7f31858](https://github.com/infodusha/aldrin/commit/7f31858158ce3b186b204a4c24c9097cc9f51617))
+* **test:** a try to update vitest 3 ([470a373](https://github.com/infodusha/aldrin/commit/470a3739de3e28ac5784c00ef436d3d742c1597a))
+
 ## [0.1.2](https://github.com/infodusha/aldrin/compare/aldrin-v0.1.1...aldrin-v0.1.2) (2022-12-22)
 
 
