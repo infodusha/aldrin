@@ -1,34 +1,34 @@
 import { describe, expect, test } from 'vitest';
-import { render } from './index';
+import { TestBed } from '../test-bed';
 
 describe('render', () => {
   test('should render null', async () => {
-    const result = await render(null);
+    const result = await TestBed.create(() => null);
 
-    expect(result).toBe('');
+    expect(result.html).toBe('');
   });
 
   test('should render undefined', async () => {
-    const result = await render(undefined);
+    const result = await TestBed.create(() => undefined);
 
-    expect(result).toBe('');
+    expect(result.html).toBe('');
   });
 
   test('should render number', async () => {
-    const result = await render(123);
+    const result = await TestBed.create(() => 123);
 
-    expect(result).toBe('123');
+    expect(result.html).toBe('123');
   });
 
   test('should render string', async () => {
-    const result = await render('test string');
+    const result = await TestBed.create(() => 'test string');
 
-    expect(result).toBe('test string');
+    expect(result.html).toBe('test string');
   });
 
   test('should render boolean', async () => {
-    const result = await render(true);
+    const result = await TestBed.create(() => true);
 
-    expect(result).toBe('true');
+    expect(result.html).toBe('true');
   });
 });
