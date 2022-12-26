@@ -66,7 +66,7 @@ declare global {
     }
 
     interface UnsafeString {
-      unsafe: string;
+      readonly unsafe: string;
     }
 
     interface ArrayElement extends Array<Element> {}

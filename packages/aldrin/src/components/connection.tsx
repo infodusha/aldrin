@@ -2,6 +2,7 @@ import { join } from 'node:path';
 import { readFileSync } from 'node:fs';
 import { config } from '../config';
 import { render, unsafe } from '../render/';
+import { renderContext, RenderContext } from '../context';
 
 const script = readFileSync(join(__dirname, '../../script.js'), 'utf-8');
 
@@ -30,5 +31,6 @@ export function getConnectionStr(): string {
 }
 
 export async function setConnectionStr(): Promise<void> {
-  connectionStr = await render(Connection());
+  const rContext = new RenderContext();
+  connectionStr = await renderContext.run(rContext, () => render(Connection()));
 }

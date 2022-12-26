@@ -1,11 +1,14 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { Mount } from './hooks/mount';
 import { Bridge } from './helpers/bridge';
+import { TreeItem, TreeNode } from './render';
 
 export class RenderContext {
   readonly mount = new Mount();
   readonly events = new Map<string, () => void>();
+  readonly treeNodeToId = new WeakMap<TreeNode, string>();
   hasBody = false;
+  treeRoot: TreeItem | undefined;
 }
 
 export class UserContext {

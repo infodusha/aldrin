@@ -1,7 +1,9 @@
 import { RenderNode } from './render-node';
+import { renderContext } from '../context';
 
 export async function render(item: JSX.Element): Promise<string> {
   const tree = await buildTree(item);
+  renderContext.get().treeRoot ??= tree;
   return renderTree(tree);
 }
 
@@ -17,11 +19,13 @@ export type TreeItem =
   | TreeNode
   | TreeItem[];
 
-function isNode(item: JSX.Element): item is JSX.Node {
+export function isNode(item: JSX.Element): item is JSX.Node;
+export function isNode(item: TreeItem): item is TreeNode;
+export function isNode(item: JSX.Element | TreeItem): item is JSX.Node | TreeNode {
   return typeof item === 'object' && item !== null && 'type' in item;
 }
 
-function isUnsafeString(item: JSX.Element): item is JSX.UnsafeString {
+export function isUnsafeString(item: JSX.Element): item is JSX.UnsafeString {
   return typeof item === 'object' && item !== null && 'unsafe' in item;
 }
 

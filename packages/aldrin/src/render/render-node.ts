@@ -9,7 +9,10 @@ const singleTags: Readonly<string[]> = ['meta', 'img', 'br', 'hr', 'input'];
 export class RenderNode {
   readonly id = crypto.randomUUID();
 
-  constructor(public readonly item: TreeNode) {}
+  constructor(public readonly item: TreeNode) {
+    const rContext = renderContext.get();
+    rContext.treeNodeToId.set(this.item, this.id);
+  }
 
   private getProps(): string {
     const props = { ...this.item.props, id: this.id };
