@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/infodusha/aldrin/compare/aldrin-v0.2.0...aldrin-v0.2.1) (2023-01-09)
+
+
+### Bug Fixes
+
+* **tsconfig:** exclude tests ([397e2fa](https://github.com/infodusha/aldrin/commit/397e2facabee320d7ffef08382554602a73d226f))
+
 ## [0.2.0](https://github.com/infodusha/aldrin/compare/aldrin-v0.1.2...aldrin-v0.2.0) (2022-12-26)
 
 
