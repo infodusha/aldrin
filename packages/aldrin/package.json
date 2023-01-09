@@ -32,7 +32,7 @@
     "script.js",
     "package.json",
     "README.md",
-    "LICENSE"
+    "CHANGELOG.md"
   ],
   "author": "infodusha",
   "license": "Apache-2.0",
